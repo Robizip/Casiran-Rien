@@ -1,5 +1,6 @@
 import pygame #type: ignore
 from pygame import *
+from loto import loto
 
 pygame.init()
 
@@ -31,7 +32,7 @@ while running:
                     etat = "menu_jeux"
             elif etat == "menu_jeux":
                 if button_jeu1.collidepoint(event.pos):
-                    etat = "jeu1"
+                    etat = "Loto"
     fenetre.blit(fond, (0,0))
     if etat == "menu_principal":
         pygame.draw.rect(fenetre, BLUE, button_menu)
@@ -41,9 +42,8 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_jeu1)
         text = font.render("Lancer Jeu 1", True, WHITE)
         fenetre.blit(text,(button_jeu1.x+40,button_jeu1.y+25))
-    elif etat == "jeu1":
-        text = font.render("Le jeu démarre ici", True, BLUE)
-        fenetre.blit(text,(320,400))
+    elif etat == "Loto":
+        loto()
 
     display.flip()  
 

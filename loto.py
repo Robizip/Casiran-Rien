@@ -20,4 +20,3 @@ def loto():
     if numero_joueur[-1] == numero_gagnant[-1]:
         print("Vous avez aussi trouvé le numéro complémentaire !")
 
-loto()
