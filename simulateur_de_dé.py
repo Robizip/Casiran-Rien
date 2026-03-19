@@ -36,4 +36,3 @@ def sim_de():
     else:
         print("L'ordi a gagné la partie...")
 
-sim_de()
