@@ -1,7 +1,7 @@
 import pygame
 import random
 
-def run(screen):
+def chifoumi(ecran):
     pierre = "pierre"
     ciseaux = "ciseaux"
     feuille = "feuille"
@@ -23,20 +23,20 @@ def run(screen):
     running = True
     while victoire_joueur < 3 and victoire_ordi < 3 and running:
 
-        screen.fill((0,0,0))
+        ecran.fill((0,0,0))
 
         # affichage scores (remplace print)
         txt = font.render(f"Toi: {victoire_joueur} | Ordi: {victoire_ordi}", True, (255,255,255))
-        screen.blit(txt, (250, 50))
+        ecran.blit(txt, (250, 50))
 
         res = font.render(message, True, (255,255,0))
-        screen.blit(res, (300, 200))
+        ecran.blit(res, (300, 200))
 
         # boutons
         for choix, rect in boutons.items():
-            pygame.draw.rect(screen, (0,0,255), rect)
+            pygame.draw.rect(ecran, (0,0,255), rect)
             t = font.render(choix, True, (255,255,255))
-            screen.blit(t, (rect.x + 20, rect.y + 20))
+            ecran.blit(t, (rect.x + 20, rect.y + 20))
 
         pygame.display.flip()
 
@@ -70,14 +70,14 @@ def run(screen):
                             message = f"Tu as perdu ({victoire_ordi})"
 
     # fin du jeu (logique conservée)
-    screen.fill((0,0,0))
+    ecran.fill((0,0,0))
     if victoire_joueur == 3:
         msg = "T'as gagné"
     else:
         msg = "T'as perdu"
 
     txt = font.render(msg, True, (255,255,255))
-    screen.blit(txt, (350, 400))
+    ecran.blit(txt, (350, 400))
     pygame.display.flip()
 
     pygame.time.wait(2000)
