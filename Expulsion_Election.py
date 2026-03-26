@@ -1,4 +1,3 @@
-<<<<<<< HEAD:Expulsion d'Election.py
 # Créé par Benjamin Castel, le 12/03/2026 en Python 3.7
 
 import random
@@ -70,7 +69,6 @@ def bataillepolitique(argent):
     
 argent = 10
 print(bataillepolitique(argent))
-=======
 # Créé par Benjamin Castel, le 12/03/2026 en Python 3.7
 
 import random
@@ -142,4 +140,3 @@ def bataillepolitique(argent):
 
 
 
->>>>>>> 15aa30881179c610921e814dd555ad0d1dfdcf5f:Expulsion_Election.py
