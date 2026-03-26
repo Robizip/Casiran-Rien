@@ -1,7 +1,7 @@
 import pygame
 import random #type: ignore
 from loto import loto_update  
-from pfc import chifoumi as chifoumi_run  # ✅ import propre
+from pfc import chifoumi as chifoumi_run
 pygame.init()
 
 # couleurs
