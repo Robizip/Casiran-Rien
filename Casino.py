@@ -27,14 +27,12 @@ button_blackjack = pygame.Rect(300, 320, 300, 80)
 button_chifoumi = pygame.Rect(300, 440, 300, 80)
 button_roulette = pygame.Rect(300, 560, 300, 80)
 
-# préparation des boutons loto (1 à 49)
 boutons = []
 for i in range(49):
     x = 50 + (i % 7) * 100
     y = 50 + (i // 7) * 80
     boutons.append((pygame.Rect(x, y, 60, 50), i+1))
 
-# données du loto
 loto_data = {
     "boutons": boutons,
     "numeros": [],
@@ -42,7 +40,6 @@ loto_data = {
     "resultat": None
 }
 
-# état du programme
 etat = "menu_principal"
 
 running = True
