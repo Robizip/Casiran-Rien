@@ -1,7 +1,7 @@
 import pygame
-import random
+import random #type: ignore
 from loto import loto_update  
-from blackjack import *
+from blackjack import menu, blackjack
 from bandit_manchot import machine_sous
 from Expulsion_Election import bataillepolitique
 from pfc import chifoumi
