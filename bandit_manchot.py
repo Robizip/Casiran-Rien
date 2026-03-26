@@ -1,16 +1,19 @@
 import random #type: ignore
 def machine_sous():
-    symboles = ["🍒", "🍋", "🍊", "🍇", "🍉", "🍀", "🔔", "💎", "⭐", "7️⃣"]
+    symboles = ["🍒", "🍋", "🍊", "🍇", "🍉", "🍀", "🔔", "💎", "⭐", "7"]
     tirage = [random.choice(symboles) for _ in range(3)]
     print(" | ".join(tirage))
-    
-    if tirage.count("7️⃣") == 3:
-        print("Jackpot, tu as gagné !!!")
-    elif tirage[0] == tirage[1] == tirage[2]:
-        print(f"Bravo, 3 {tirage[0]} identiques !!")
-    elif tirage[0] == tirage[1] or tirage[1] == tirage[2] or tirage[0] == tirage[2]:
+
+    tirage = list(set(tirage)) # Retire tous les éléments en double du tirage
+    if len(tirage) == 1 : # Vérification 3 symboles identiques
+        if tirage[0] == "7" : # Vérification si jackpot
+            print("Jackpot, tu as gagné !!!")
+        else :
+            print(f"Bravo, 3 {tirage[0]} identiques !!")
+    elif len(tirage) == 2 : # Vérification 2 symboles identiques
         print("Deux symboles identiques, pas mauvais")
-    else:
+    else :
         print("Perdu, réessaie !")
 
-machine_sous()
+for x in range(20) :
+    machine_sous()
