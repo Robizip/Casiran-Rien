@@ -4,12 +4,18 @@ import time
 def bataillepolitique(argent):
     dead = [] #établissement des variables
     possiblemort = ["meurt en glissant sur une flaque", "meurt en prétant allégence", "a bus trop de boisson splashbot les meilleurs boissons dans ce coin de l'assemblé national", "se prend un coup du crâne à lylian", "s'est fait 3 couronnes", "quitte ce monde cruel", "se perd sur 4chan", "se fait harceler par Amin Saadi", "s'endort paisiblement", "se prend le coin de la table", "a trop pratiqué l'ABR", "se fait compresser en .zip", "commence sa carrière de modérateur discord", "s'est fait cancel", "a été retrouvé sur les fichiers Epstein", "meurt"]
-    listecombattans = ["Zemmour", "Macron", "Melenchon", "Bardella", "MarineLepen", "JeanMarrieLepen", "NicolaSarkozy", "FrançoisHollande"]
-    combattans = {"Zemmour":[], "Macron":[], "Melenchon":[], "Bardella":[], "MarineLepen":[], "JeanMarrieLepen":[], "NicolaSarkozy":[], "FrançoisHollande":[]}
+    listecombattans = ["Zemmour", "Macron", "Melenchon", "Bardella", "MarineLepen", "JeanMarieLepen", "NicolaSarkozy", "FrançoisHollande"]
+    combattans = {}
+    for personne in listecombattans : # Application des stats aux différents personnages
+        Vie = random.randint(10,20) # Vie du personnage
+        Puissance = random.randint(1,5) # Puissance = Nombre de dégâts pouvant être infligé par le personnage
+        Evasion = random.randint(0,6) # Evasion = pourcentage de chance d'esquiver les attaques subies
+        Etat = 0 # Donnée binaire pour savoir si vie ou mort
+        combattans[personne] = [Vie, Puissance, Evasion, Etat]
 
     while True: #choix du personnage
-        print("choisisez votre combattant parmis cette liste:")
-        choix = input(str(listecombattans))
+        print("choisisez votre combattant parmis cette liste : ")
+        choix = input(f"{str(listecombattans)}\n")
         if choix.lower() in [c.lower() for c in listecombattans]:
             break
         else:
@@ -17,20 +23,14 @@ def bataillepolitique(argent):
 
     print(f"Choix pris en compte, vous avez donc parié {argent} sur {choix}")
 
-    for z in listecombattans : #établissement aléatoire des stats
-        combattans[z].append(random.randint(10,20)) #vie
-        combattans[z].append(random.randint(1,5)) #dégats
-        combattans[z].append(random.randint(0,6)) #evasion = pourcentage de chance d'esquiver
-        combattans[z].append(0) #donné binaire pour vie/mort
-
     print("Êtes vous prêt ?")
     print("Que le combat commence ! Bonne chance à tout les gladiateurs, et que le meilleur gagne !")
     time.sleep(3)
     tours = 0
-    print("Tours 0")
+    print("\nTour 0")
     while len(dead) < 8: #boucle durant tout le combat 
         if tours > 0:
-            print(f"Tours {tours}") #annonce du tour
+            print(f"\nTour {tours}") #annonce du tour
         random.shuffle(listecombattans)
         for z in listecombattans: #chaque combattans fait son action
             if z not in dead:
@@ -49,9 +49,9 @@ def bataillepolitique(argent):
                     if combattans[cible][0] < 1:
                         if cible not in dead:  
                             dead.append(cible) #le combattant est mis comme mort
-                        print(f"{z} attaque {cible}, et {cible} {random.choice(possiblemort)} !") #message de mort aléatoire
+                        print(f"{z} attaque {cible}, et {cible} {random.choice(possiblemort)} !\n") #message de mort aléatoire
                     else:
-                        print(f"{z} attaque {cible}, {cible} prend {combattans[z][1]} dégats ! \nIl lui reste {combattans[cible][0]} points de vie..")
+                        print(f"{z} attaque {cible}, {cible} prend {combattans[z][1]} dégats ! \nIl lui reste {combattans[cible][0]} points de vie.")
                         time.sleep(2) #attente pour rendre le jeu moins rapide
         tours += 1
         time.sleep(1)
@@ -77,5 +77,17 @@ def bataillepolitique(argent):
         print("\nou alors une petite pause au bar dans le coin là-bas.")
         return 0
     
-argent = 10
+verif = False # 3ème utilisation du système de vérification
+while not verif: 
+    argent = input("Combien d’argent souhaitez-vous parier? ")
+    try :
+        int(argent)
+    except :
+        print("Merci de mettre de vrai nombre.\n")
+    else :
+        argent = int(argent)
+        if argent <= 0 :
+            print("Merci de ne pas mettre de nombre négatif ou nul.\n")
+        else :
+            verif = True
 print(bataillepolitique(argent))
