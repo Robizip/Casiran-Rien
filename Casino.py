@@ -1,13 +1,13 @@
 import pygame
 import random #type: ignore
 from loto import loto_update  
-from blackjack import menu, blackjack
-from bandit_manchot import machine_sous
-from Expulsion_Election import bataillepolitique
-from pfc import chifoumi
-from roulette import *
-from simulateur_de_dé import sim_de
-from Texas_Holdem import *
+# from blackjack import menu, blackjack
+# from bandit_manchot import machine_sous
+# from Expulsion_Election import bataillepolitique
+# from pfc import chifoumi
+# from roulette import *
+# from simulateur_de_dé import sim_de
+# from Texas_Holdem import *
 pygame.init()
 
 # couleurs
