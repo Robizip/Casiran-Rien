@@ -54,7 +54,6 @@ def chifoumi(ecran):
 
                         ordi = random.choice(jeu)
 
-                        # LOGIQUE IDENTIQUE À TON CODE
                         if choix == ordi:
                             message = "Egalite"
 
