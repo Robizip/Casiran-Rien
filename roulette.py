@@ -70,7 +70,7 @@ def roulette(argent):
         elif str(bet[z]) == color:  # inutile de caster deux fois
             print(f"Congrats, you win with a color bet with the color {color}\n"
             "your bet money ({bet[z+1]}), with a 1:1 rule, goes up to {bet[z+1]*2}")
-            argent += bet[z+1]*2
+            argent += bet[z+1]*2
 
 
     print(f"Your money went from: {startmoney}, to {argent}.")
