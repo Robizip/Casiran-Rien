@@ -14,6 +14,5 @@ def machine_sous():
         print("Deux symboles identiques, pas mauvais")
     else :
         print("Perdu, réessaie !")
-
-for x in range(20) :
-    machine_sous()
+        
+machine_sous()
