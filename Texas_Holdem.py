@@ -108,4 +108,4 @@ while argent >= 2:
     argent = texaslocal(argent)
     print("Argent :", argent)
 
-print("💀 T'as plus d'argent")
+print("T'as plus d'argent")
