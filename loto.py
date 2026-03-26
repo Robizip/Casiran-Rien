@@ -1,23 +1,47 @@
-import random #type: ignore
+import pygame
+import random
 
-def loto():
-    numero_joueur = []
-    for i in range(5):
-        choix = int(input(f"Choisissez votre numéro {i+1} entre 1 et 49 : "))
-        numero_joueur.append(choix)
-    choix_complementaire = int(input("Choisissez votre numéro complémentaire entre 1 et 10 : "))
-    numero_joueur.append(choix_complementaire)
-    numero_gagnant = random.sample(range(1, 50), 5)  # 5 numéros uniques entre 1 et 49
-    loto_complementaire = random.randint(1, 10)
-    numero_gagnant.append(loto_complementaire)
-    print("\nVos numéros :", numero_joueur[:-1], " + complémentaire :", numero_joueur[-1])
-    print("Numéros gagnants :", numero_gagnant[:-1], " + complémentaire :", numero_gagnant[-1])
-    bons_numeros = set(numero_joueur[:-1]) & set(numero_gagnant[:-1])
-    if bons_numeros == 0:
-        print("Vous avez 0 bons numéros ")
-    else:
-        print(f"\nVous avez trouvé {len(bons_numeros)} bons numéros :", bons_numeros)
-    if numero_joueur[-1] == numero_gagnant[-1]:
-        print("Vous avez aussi trouvé le numéro complémentaire !")
+def loto_update(fenetre, event, data):
+    font = pygame.font.Font(None, 30)
 
-loto()
+    boutons = data["boutons"]
+    numeros = data["numeros"]
+    complementaire = data["complementaire"]
+    resultat = data["resultat"]
+
+    # clic souris
+    if event and event.type == pygame.MOUSEBUTTONDOWN:
+        for rect, num in boutons:
+            if rect.collidepoint(event.pos):
+                if len(numeros) < 5 and num not in numeros:
+                    numeros.append(num)
+                elif len(numeros) == 5:
+                    data["complementaire"] = num
+
+    # touche espace
+    if event and event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_SPACE:
+            if len(numeros) == 5 and complementaire:
+                gagnants = random.sample(range(1,50),5)
+                comp = random.randint(1,10)
+                bons = set(numeros) & set(gagnants)
+                data["resultat"] = (gagnants, comp, bons)
+
+    # affichage
+    fenetre.fill((0,0,0))
+
+    for rect, num in boutons:
+        pygame.draw.rect(fenetre, (100,100,100), rect)
+        txt = font.render(str(num), True, (255,255,255))
+        fenetre.blit(txt, (rect.x+10, rect.y+10))
+
+    txt = font.render(f"{numeros} + {complementaire}", True, (255,255,255))
+    fenetre.blit(txt, (50, 650))
+
+    if resultat:
+        gagnants, comp, bons = resultat
+        t1 = font.render(f"Gagnants: {gagnants} + {comp}", True, (255,255,255))
+        fenetre.blit(t1, (50,700))
+
+        t2 = font.render(f"Bons: {list(bons)}", True, (255,255,255))
+        fenetre.blit(t2, (50,750))

@@ -1,2 +1,3 @@
 # Casiran-Rien
-NOUS ALLONS SAUVER DES GENS
+---
+Prérequis : Avoir la librairie Pygames d’installé sur son ordinateur
