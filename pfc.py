@@ -62,18 +62,18 @@ def chifoumi(ecran):
                         or (choix == "feuille" and ordi == "pierre"):
 
                             victoire_joueur += 1
-                            message = f"Tu as gagné un point ({victoire_joueur})"
+                            message = f"Vous avez gagné un point ({victoire_joueur})"
 
                         else:
                             victoire_ordi += 1
-                            message = f"Tu as perdu ({victoire_ordi})"
+                            message = f"L'ordi a gagné un point ({victoire_ordi})"
 
     # fin du jeu (logique conservée)
     ecran.fill((0,0,0))
     if victoire_joueur == 3:
-        msg = "T'as gagné"
+        msg = "Vous avez gagné la partie, veuillez réessayer en remisant votre argent pour encore plus profiter"
     else:
-        msg = "T'as perdu"
+        msg = "Vous avez perdu, retentez votre chance et ne vous laissez pas humilier par une IA"
 
     txt = font.render(msg, True, (255,255,255))
     ecran.blit(txt, (350, 400))
