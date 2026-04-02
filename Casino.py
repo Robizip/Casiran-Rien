@@ -2,6 +2,7 @@ import pygame
 import random #type: ignore
 from loto import loto_update  
 from pfc import chifoumi as chifoumi_run
+from Expulsion_Election import bataillepolitique as bataillepolitique_run
 pygame.init()
 
 # couleurs
@@ -26,6 +27,7 @@ button_loto = pygame.Rect(300, 200, 300, 80)
 button_blackjack = pygame.Rect(300, 320, 300, 80)
 button_chifoumi = pygame.Rect(300, 440, 300, 80)
 button_roulette = pygame.Rect(300, 560, 300, 80)
+button_bp = pygame.Rect(300, 680, 300, 80)
 
 boutons = []
 for i in range(49):
@@ -60,6 +62,8 @@ while running:
                     print("Blackjack à connecter")
                 elif button_roulette.collidepoint(event.pos):
                     print("Roulette à connecter")
+                elif button_bp.collidepoint(event.pos):
+                   bataillepolitique_run(fenetre) 
             elif etat == "loto":
                 loto_update(fenetre, event, loto_data)
 
@@ -77,10 +81,12 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_blackjack)
         pygame.draw.rect(fenetre, BLUE, button_chifoumi)
         pygame.draw.rect(fenetre, BLUE, button_roulette)
+        pygame.draw.rect(fenetre, BLUE, button_bp)
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 110, button_loto.y + 25))
         fenetre.blit(font.render("Blackjack", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
         fenetre.blit(font.render("Roulette", True, WHITE), (button_roulette.x + 80, button_roulette.y + 25))
+        fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 80, button_bp.y + 25))
     
     elif etat == "loto":
         loto_update(fenetre, None, loto_data)

@@ -1,93 +1,178 @@
+import pygame
 import random
-import time
 
-def bataillepolitique(argent):
-    dead = [] #établissement des variables
-    possiblemort = ["meurt en glissant sur une flaque", "meurt en prétant allégence", "a bus trop de boisson splashbot les meilleurs boissons dans ce coin de l'assemblé national", "se prend un coup du crâne à lylian", "s'est fait 3 couronnes", "quitte ce monde cruel", "se perd sur 4chan", "se fait harceler par Amin Saadi", "s'endort paisiblement", "se prend le coin de la table", "a trop pratiqué l'ABR", "se fait compresser en .zip", "commence sa carrière de modérateur discord", "s'est fait cancel", "a été retrouvé sur les fichiers Epstein", "meurt"]
-    listecombattans = ["Zemmour", "Macron", "Melenchon", "Bardella", "MarineLepen", "JeanMarieLepen", "NicolaSarkozy", "FrançoisHollande"]
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+RED = (200, 50, 50)
+GREEN = (50, 200, 50)
+GREY = (180, 180, 180)
+DARK = (30, 30, 30)
+
+def bataillepolitique(fenetre):
+    font = pygame.font.Font(None, 32)
+    font_small = pygame.font.Font(None, 26)
+    clock = pygame.time.Clock()
+
+    listecombattans = [
+        "Zemmour", "Macron", "Melenchon", "Bardella",
+        "MarineLepen", "JeanMarieLepen", "NicolaSarkozy", "FrançoisHollande",
+    ]
+
+    # ── Phase 1 : saisie du choix ──────────────────────────────────────────
+    texte_saisi = ""
+    erreur = ""
+
+    saisie_en_cours = True
+    while saisie_en_cours:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
+                elif event.key == pygame.K_BACKSPACE:
+                    texte_saisi = texte_saisi[:-1]
+                elif event.key == pygame.K_RETURN:
+                    match = next((c for c in listecombattans if c.lower() == texte_saisi.lower()), None)
+                    if match:
+                        choix = match
+                        saisie_en_cours = False
+                    else:
+                        erreur = "Nom introuvable, vérifiez l'orthographe."
+                else:
+                    texte_saisi += event.unicode
+
+        fenetre.fill(DARK)
+
+        # titre
+        titre = font.render("Bataille Politique — Choisissez votre combattant", True, WHITE)
+        fenetre.blit(titre, (fenetre.get_width() // 2 - titre.get_width() // 2, 40))
+
+        # liste des combattants
+        label = font_small.render("Combattants disponibles :", True, GREY)
+        fenetre.blit(label, (80, 100))
+        for i, nom in enumerate(listecombattans):
+            t = font_small.render(f"• {nom}", True, WHITE)
+            fenetre.blit(t, (80 + (i // 4) * 400, 130 + (i % 4) * 35))
+
+        # champ de saisie
+        pygame.draw.rect(fenetre, WHITE, (200, 360, 500, 45), 2)
+        saisi_surface = font.render(texte_saisi, True, WHITE)
+        fenetre.blit(saisi_surface, (210, 370))
+
+        label2 = font_small.render("Entrez un nom puis appuyez sur Entrée :", True, GREY)
+        fenetre.blit(label2, (200, 330))
+
+        if erreur:
+            err_surf = font_small.render(erreur, True, RED)
+            fenetre.blit(err_surf, (200, 415))
+
+        echap = font_small.render("Échap pour revenir au menu", True, GREY)
+        fenetre.blit(echap, (80, fenetre.get_height() - 40))
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    # ── Phase 2 : combat ───────────────────────────────────────────────────
+    possiblemort = [
+        "meurt en glissant sur une flaque",
+        "meurt en prétant allégence",
+        "a bu trop de boisson splashbot",
+        "se prend un coup du crâne à lylian",
+        "s'est fait 3 couronnes",
+        "quitte ce monde cruel",
+        "se perd sur 4chan",
+        "se fait harceler par Amin Saadi",
+        "s'endort paisiblement",
+        "se prend le coin de la table",
+        "a trop pratiqué l'ABR",
+        "se fait compresser en .zip",
+        "commence sa carrière de modérateur discord",
+        "s'est fait cancel",
+        "a été retrouvé sur les fichiers Epstein",
+        "meurt",
+    ]
+
     combattans = {}
-    for personne in listecombattans : # Application des stats aux différents personnages
-        Vie = random.randint(10,20) # Vie du personnage
-        Puissance = random.randint(1,5) # Puissance = Nombre de dégâts pouvant être infligé par le personnage
-        Evasion = random.randint(0,6) # Evasion = pourcentage de chance d'esquiver les attaques subies
-        Etat = 0 # Donnée binaire pour savoir si vie ou mort
-        combattans[personne] = [Vie, Puissance, Evasion, Etat]
+    for personne in listecombattans:
+        combattans[personne] = [random.randint(10, 20), random.randint(1, 5), random.randint(0, 6), 0]
 
-    while True: #choix du personnage
-        print("choisisez votre combattant parmis cette liste : ")
-        choix = input(f"{str(listecombattans)}\n")
-        if choix.lower() in [c.lower() for c in listecombattans]:
-            break
-        else:
-            print(f"{choix} ? Ce choix me semble incorect veillez essayer à nouveau, \n Pensez à faire attention à la liste des personnages disponible et à l'orthographe de ceux-ci.")
-
-    print(f"Choix pris en compte, vous avez donc parié {argent} sur {choix}")
-
-    print("Êtes vous prêt ?")
-    print("Que le combat commence ! Bonne chance à tout les gladiateurs, et que le meilleur gagne !")
-    time.sleep(3)
+    dead = []
+    messages = [f"Vous avez choisi {choix} ! Que le combat commence !"]
     tours = 0
-    print("\nTour 0")
-    while len(dead) < 8: #boucle durant tout le combat 
-        if tours > 0:
-            print(f"\nTour {tours}") #annonce du tour
+    scroll_offset = 0
+
+    # génération de tous les messages du combat d'un coup
+    while len(dead) < 8:
+        messages.append(f"── Tour {tours} ──")
         random.shuffle(listecombattans)
-        for z in listecombattans: #chaque combattans fait son action
+
+        for z in listecombattans:
             if z not in dead:
-                combattanspossible = listecombattans.copy() 
-                combattanspossible.remove(z)
-                for zz in dead: #rend impossible que l'ia attaque un personnage déjà mort
-                    if zz in combattanspossible: 
-                        combattanspossible.remove(zz)
-                if not combattanspossible:  
+                combattanspossible = [c for c in listecombattans if c != z and c not in dead]
+                if not combattanspossible:
                     continue
-                cible = random.choice(combattanspossible)#le personnage cible un autre
-                if random.randint(0,10) <= combattans[cible][2]: #teste si la cible arrive à esquive celon sa state d'evasion
-                    print(f"{z} attaque {cible}, mais {cible} esquive !")
+                cible = random.choice(combattanspossible)
+
+                if random.randint(0, 10) <= combattans[cible][2]:
+                    messages.append(f"{z} attaque {cible}, mais {cible} esquive !")
                 else:
                     combattans[cible][0] -= combattans[z][1]
                     if combattans[cible][0] < 1:
-                        if cible not in dead:  
-                            dead.append(cible) #le combattant est mis comme mort
-                        print(f"{z} attaque {cible}, et {cible} {random.choice(possiblemort)} !\n") #message de mort aléatoire
+                        if cible not in dead:
+                            dead.append(cible)
+                        messages.append(f"{z} attaque {cible}, et {cible} {random.choice(possiblemort)} !")
                     else:
-                        print(f"{z} attaque {cible}, {cible} prend {combattans[z][1]} dégats ! \nIl lui reste {combattans[cible][0]} points de vie.")
-                        time.sleep(2) #attente pour rendre le jeu moins rapide
+                        messages.append(
+                            f"{z} attaque {cible} — {combattans[z][1]} dégâts, il reste {combattans[cible][0]} PV."
+                        )
+
         tours += 1
-        time.sleep(1)
-        if len(dead) == 7:  
+        if len(dead) == 7:
             break
-    for amin in listecombattans: #recherche du personnage encore en vie
-        if amin not in dead:
-            gagnant = amin
-    if gagnant == None: #teste en cas où le code ne marche pas 
-        gagnant = "Erreur votre argent vous a été rendu"
-        return argent
-    time.sleep(1)
-    print(f"Et le grand vainqueur est {gagnant}")
-    time.sleep(1)
-    if gagnant == choix:
-        print("\n\nvous avez parié sur le cheval gagnant !")
-        print(f"votre argent passe de {argent}€ à {argent * 8}€")
-        print("\nBravo, n'hésitez pas à rejouer ! \nCe serait dommage de casser une série.")
-        return argent*8
+
+    gagnant = next((c for c in listecombattans if c not in dead), None)
+    if gagnant is None:
+        messages.append("Erreur : pas de gagnant.")
     else:
-        print("\n\nDommage, vous perdez tout votre argent")
-        print("Un deuxième round pour le regagner ?")
-        print("\nou alors une petite pause au bar dans le coin là-bas.")
-        return 0
-    
-verif = False # 3ème utilisation du système de vérification
-while not verif: 
-    argent = input("Combien d’argent souhaitez-vous parier? ")
-    try :
-        int(argent)
-    except :
-        print("Merci de mettre de vrai nombre.\n")
-    else :
-        argent = int(argent)
-        if argent <= 0 :
-            print("Merci de ne pas mettre de nombre négatif ou nul.\n")
-        else :
-            verif = True
-print(bataillepolitique(argent))
+        messages.append(f"🏆 Le grand vainqueur est {gagnant} !")
+        if gagnant == choix:
+            messages.append("Vous avez parié sur le bon cheval !")
+        else:
+            messages.append("Dommage, vous perdez !")
+
+    # affichage du log scrollable
+    ligne_h = 28
+    visible = (fenetre.get_height() - 80) // ligne_h
+
+    affichage = True
+    while affichage:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    affichage = False
+                elif event.key == pygame.K_DOWN:
+                    scroll_offset = min(scroll_offset + 1, max(0, len(messages) - visible))
+                elif event.key == pygame.K_UP:
+                    scroll_offset = max(scroll_offset - 1, 0)
+            if event.type == pygame.MOUSEWHEEL:
+                scroll_offset -= event.y
+                scroll_offset = max(0, min(scroll_offset, max(0, len(messages) - visible)))
+
+        fenetre.fill(DARK)
+
+        for i, msg in enumerate(messages[scroll_offset:scroll_offset + visible]):
+            couleur = GREEN if "vainqueur" in msg or "parié sur" in msg else RED if "meurt" in msg or "quitte" in msg or "s'est" in msg or "compresser" in msg or "cancel" in msg or "Epstein" in msg or "discord" in msg or "ABR" in msg or "paisiblement" in msg or "table" in msg or "4chan" in msg or "lylian" in msg or "couronnes" in msg or "splashbot" in msg or "allégence" in msg or "glissant" in msg or "Saadi" in msg else WHITE
+            surf = font_small.render(msg, True, couleur)
+            fenetre.blit(surf, (40, 20 + i * ligne_h))
+
+        hint = font_small.render("↑↓ ou molette pour défiler  |  Échap pour revenir", True, GREY)
+        fenetre.blit(hint, (40, fenetre.get_height() - 35))
+
+        pygame.display.flip()
+        clock.tick(60)
