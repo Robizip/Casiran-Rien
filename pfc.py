@@ -71,9 +71,11 @@ def chifoumi(ecran):
     # fin du jeu (logique conservée)
     ecran.fill((0,0,0))
     if victoire_joueur == 3:
-        msg = "Vous avez gagné la partie, veuillez réessayer en remisant votre argent pour encore plus profiter"
+        msg = "Vous avez gagné la partie, veuillez " \
+        "réessayer en remisant votre argent pour encore plus profiter"
     else:
-        msg = "Vous avez perdu, retentez votre chance et ne vous laissez pas humilier par une IA"
+        msg = "Vous avez perdu, retentez " \
+        "votre chance et ne vous laissez pas humilier par une IA"
 
     txt = font.render(msg, True, (255,255,255))
     ecran.blit(txt, (350, 400))
