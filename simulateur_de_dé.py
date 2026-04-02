@@ -1,67 +1,140 @@
-import random #type: ignore
-
-def sim_de():
+import pygame
+import random
+ 
+WHITE = (255, 255, 255)
+RED = (200, 50, 50)
+GREEN = (50, 200, 50)
+GREY = (180, 180, 180)
+DARK = (30, 30, 30)
+YELLOW = (255, 215, 0)
+BLUE = (60, 60, 200)
+ 
+ 
+def sim_de(fenetre):
+    font = pygame.font.Font(None, 38)
+    font_small = pygame.font.Font(None, 28)
+    clock = pygame.time.Clock()
+    W, H = fenetre.get_size()
     manche_joueurs = 0
     manche_ordi = 0
-    
+    def saisie_nombre(label):
+        """Petit écran de saisie générique, retourne un int > 0 ou None si Échap."""
+        texte = ""
+        erreur = ""
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    return None
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return None
+                    elif event.key == pygame.K_BACKSPACE:
+                        texte = texte[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        try:
+                            val = int(texte)
+                            if val <= 0:
+                                erreur = "Entrez un nombre positif."
+                            else:
+                                return val
+                        except ValueError:
+                            erreur = "Entrez un nombre valide."
+                    elif event.unicode.isdigit():
+                        texte += event.unicode
+            fenetre.fill(DARK)
+            titre = font.render("Simulation de Dés", True, WHITE)
+            fenetre.blit(titre, (W // 2 - titre.get_width() // 2, 80))
+            score = font_small.render(f"Score — Toi : {manche_joueurs}  |  Ordi : {manche_ordi}", True, YELLOW)
+            fenetre.blit(score, (W // 2 - score.get_width() // 2, 150))
+            lbl = font.render(label, True, GREY)
+            fenetre.blit(lbl, (W // 2 - lbl.get_width() // 2, 260))
+            pygame.draw.rect(fenetre, WHITE, (W // 2 - 150, 310, 300, 45), 2)
+            fenetre.blit(font.render(texte, True, WHITE), (W // 2 - 140, 320))
+            if erreur:
+                fenetre.blit(font_small.render(erreur, True, RED), (W // 2 - 150, 370))
+            fenetre.blit(font_small.render("Échap pour revenir", True, GREY), (40, H - 40))
+            pygame.display.flip()
+            clock.tick(60)
+    # ── boucle des manches ────────────────────────────────────────────────
     while manche_joueurs < 3 and manche_ordi < 3:
-        liste_joueurs = [] # on vide les listes au début de chaque manche
+        lancers = saisie_nombre("Combien de dés lancer ?")
+        if lancers is None:
+            return
+        face = saisie_nombre("Combien de faces par dé ?")
+        if face is None:
+            return
+        # tirage
+        liste_joueurs = []
         liste_ordi = []
-        
-        verif_lancers = False # Système vérification
-        while not verif_lancers: 
-            lancers = input("Combien de dés souhaitez-vous lancer? ")
-            try :
-                int(lancers)
-            except :
-                print("Merci de mettre de vrai nombre.\n")
-            else :
-                lancers = int(lancers)
-                if lancers <= 0 :
-                    print("Merci de ne pas mettre de nombre négatif ou nul.\n")
-                else :
-                    verif_lancers = True
-
-
-        
-        verif_face = False # El famoso retour du système de vérification
-        while not verif_face: 
-            face = input("Combien de faces souhaitez-vous ? ")
-            try :
-                int(face)
-            except :
-                print("Merci de mettre de vrai nombre.\n")
-            else :
-                face = int(face)
-                if face <= 0 :
-                    print("Merci de ne pas mettre de nombre négatif ou nul.\n")
-                else :
-                    verif_face = True
-        
+        lignes = []
         for i in range(lancers):
-            dés = random.randint(1, face)
+            de = random.randint(1, face)
             ordi = random.randint(1, face)
-            print(f"Valeur de ton dé : {dés} | Valeur du dé de l’ordi : {ordi}")
-            liste_joueurs.append(dés)
+            liste_joueurs.append(de)
             liste_ordi.append(ordi)
-            
-            # somme après la manche
-            somme_joueurs = sum(liste_joueurs)
-            somme_ordi = sum(liste_ordi)
-            print(f"Somme personnelle : {somme_joueurs}")
-            print(f"Somme ordi : {somme_ordi}")
+            lignes.append((f"Dé {i+1} — Toi : {de}  |  Ordi : {ordi}", WHITE))
+        somme_joueurs = sum(liste_joueurs)
+        somme_ordi = sum(liste_ordi)
+        lignes.append((f"Total — Toi : {somme_joueurs}  |  Ordi : {somme_ordi}", YELLOW))
         if somme_joueurs > somme_ordi:
             manche_joueurs += 1
-            print(f"\nTu gagnes cette manche ! Score : Toi {manche_joueurs} - Ordi {manche_ordi}\n")
+            lignes.append(("Tu gagnes cette manche !", GREEN))
         elif somme_ordi > somme_joueurs:
             manche_ordi += 1
-            print(f"\nL’ordi gagne cette manche ! Score : Toi {manche_joueurs} - Ordi {manche_ordi}\n")
+            lignes.append(("L'ordi gagne cette manche !", RED))
         else:
-            print("\nÉgalité ! Pas de point ajouté.\n")
-    # fin du jeu
+            lignes.append(("Égalité ! Pas de point.", GREY))
+        lignes.append((f"Score — Toi : {manche_joueurs}  |  Ordi : {manche_ordi}", YELLOW))
+        # affichage résultat manche
+        scroll = 0
+        visible = (H - 120) // 32
+        attente = True
+        while attente:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    return
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
+                    elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                        attente = False
+                    elif event.key == pygame.K_DOWN:
+                        scroll = min(scroll + 1, max(0, len(lignes) - visible))
+                    elif event.key == pygame.K_UP:
+                        scroll = max(scroll - 1, 0)
+                if event.type == pygame.MOUSEWHEEL:
+                    scroll = max(0, min(scroll - event.y, max(0, len(lignes) - visible)))
+            fenetre.fill(DARK)
+            for i, (msg, col) in enumerate(lignes[scroll:scroll + visible]):
+                fenetre.blit(font_small.render(msg, True, col), (60, 40 + i * 32))
+            hint = font_small.render("Entrée / Espace pour continuer  |  ↑↓ défiler  |  Échap quitter", True, GREY)
+            fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 40))
+            pygame.display.flip()
+            clock.tick(60)
+    # ── écran de fin ──────────────────────────────────────────────────────
     if manche_joueurs == 3:
-        print("\nBRAVO ! Tu as gagné la partie.")
+        msg_fin = "BRAVO ! Tu as gagné la partie !"
+        col_fin = GREEN
     else:
-        print("\nL'ordi a gagné la partie...")
-
-sim_de()
+        msg_fin = "L'ordi a gagné la partie..."
+        col_fin = RED
+    attente_fin = True
+    while attente_fin:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
+                    attente_fin = False
+        fenetre.fill(DARK)
+        surf = font.render(msg_fin, True, col_fin)
+        fenetre.blit(surf, (W // 2 - surf.get_width() // 2, H // 2 - 40))
+        score_fin = font_small.render(f"Score final — Toi : {manche_joueurs}  |  Ordi : {manche_ordi}", True, YELLOW)
+        fenetre.blit(score_fin, (W // 2 - score_fin.get_width() // 2, H // 2 + 20))
+        hint = font_small.render("Entrée ou Échap pour revenir", True, GREY)
+        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 40))
+        pygame.display.flip()
+        clock.tick(60)

@@ -2,6 +2,10 @@ import pygame
 import random #type: ignore
 from loto import loto_update  
 from pfc import chifoumi as chifoumi_run
+from blackjack import blackjack as blackjack_run
+from roulette import roulette as roulette_run
+from bandit_manchot import machine_sous as machine_sous_run
+from simulateur_de_dé import sim_de as sim_de_run
 from Expulsion_Election import bataillepolitique as bataillepolitique_run
 pygame.init()
 
@@ -23,11 +27,13 @@ font = pygame.font.Font(None, 36)
 
 # boutons menu
 button_menu = pygame.Rect(300, 250, 300, 80)
-button_loto = pygame.Rect(300, 200, 300, 80)
-button_blackjack = pygame.Rect(300, 320, 300, 80)
-button_chifoumi = pygame.Rect(300, 440, 300, 80)
-button_roulette = pygame.Rect(300, 560, 300, 80)
-button_bp = pygame.Rect(300, 680, 300, 80)
+button_loto = pygame.Rect(300, 80, 300, 80)
+button_blackjack = pygame.Rect(300, 200, 300, 80)
+button_chifoumi = pygame.Rect(300, 320, 300, 80)
+button_roulette = pygame.Rect(300, 440, 300, 80)
+button_bp = pygame.Rect(300, 560, 300, 80)
+button_bm = pygame.Rect(300, 680, 300, 80)
+button_de = pygame.Rect(300, 800, 300, 80)
 
 boutons = []
 for i in range(49):
@@ -59,11 +65,15 @@ while running:
                 elif button_chifoumi.collidepoint(event.pos):
                     chifoumi_run(fenetre)
                 elif button_blackjack.collidepoint(event.pos):
-                    print("Blackjack à connecter")
+                    blackjack_run(fenetre)
                 elif button_roulette.collidepoint(event.pos):
-                    print("Roulette à connecter")
+                    roulette_run(fenetre)
                 elif button_bp.collidepoint(event.pos):
                    bataillepolitique_run(fenetre) 
+                elif button_bm.collidepoint(event.pos):
+                    machine_sous_run(fenetre)
+                elif button_de.collidepoint(event.pos):
+                    sim_de_run(fenetre)
             elif etat == "loto":
                 loto_update(fenetre, event, loto_data)
 
@@ -82,12 +92,16 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_chifoumi)
         pygame.draw.rect(fenetre, BLUE, button_roulette)
         pygame.draw.rect(fenetre, BLUE, button_bp)
+        pygame.draw.rect(fenetre, BLUE, button_bm)
+        pygame.draw.rect(fenetre, BLUE, button_de)
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 110, button_loto.y + 25))
         fenetre.blit(font.render("Blackjack", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
         fenetre.blit(font.render("Roulette", True, WHITE), (button_roulette.x + 80, button_roulette.y + 25))
         fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 80, button_bp.y + 25))
-    
+        fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 80, button_bm.y + 25))
+        fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 80, button_de.y + 25))
+
     elif etat == "loto":
         loto_update(fenetre, None, loto_data)
     pygame.display.flip()
