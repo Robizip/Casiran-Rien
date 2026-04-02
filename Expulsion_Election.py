@@ -106,7 +106,8 @@ def bataillepolitique(fenetre):
 
     # génération de tous les messages du combat d'un coup
     while len(dead) < 8:
-        messages.append(f"── Tour {tours} ──")
+        messages.append("")
+        messages.append(f"Tour {tours}")
         random.shuffle(listecombattans)
 
         for z in listecombattans:
@@ -134,10 +135,11 @@ def bataillepolitique(fenetre):
             break
 
     gagnant = next((c for c in listecombattans if c not in dead), None)
+    messages.append("")
     if gagnant is None:
         messages.append("Erreur : pas de gagnant.")
     else:
-        messages.append(f"🏆 Le grand vainqueur est {gagnant} !")
+        messages.append(f"Le grand vainqueur est {gagnant} !")
         if gagnant == choix:
             messages.append("Vous avez parié sur le bon cheval !")
         else:
@@ -171,7 +173,7 @@ def bataillepolitique(fenetre):
             surf = font_small.render(msg, True, couleur)
             fenetre.blit(surf, (40, 20 + i * ligne_h))
 
-        hint = font_small.render("↑↓ ou molette pour défiler  |  Échap pour revenir", True, GREY)
+        hint = font_small.render("Flèches ou Molette pour faire défiler  |  Échap pour revenir", True, GREY)
         fenetre.blit(hint, (40, fenetre.get_height() - 35))
 
         pygame.display.flip()
