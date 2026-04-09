@@ -219,5 +219,3 @@ def roulette(fenetre):
                     fenetre.blit(font_small.render(erreur, True, RED), (40, H - 30))
             pygame.display.flip()
             clock.tick(60)
-import time
-argent = int(input("argent totale"))
