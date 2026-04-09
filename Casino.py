@@ -1,6 +1,6 @@
 import pygame
 import random #type: ignore
-from loto import loto_update  
+from loto import loto as loto_run
 from pfc import chifoumi as chifoumi_run
 from blackjack import blackjack as blackjack_run
 from roulette import roulette as roulette_run
@@ -38,19 +38,6 @@ button_bp = pygame.Rect(300, 560, 300, 80)
 button_bm = pygame.Rect(300, 680, 300, 80)
 button_de = pygame.Rect(300, 800, 300, 80)
 
-boutons = []
-for i in range(49):
-    x = 50 + (i % 7) * 100
-    y = 50 + (i // 7) * 80
-    boutons.append((pygame.Rect(x, y, 60, 50), i+1))
-
-loto_data = {
-    "boutons": boutons,
-    "numeros": [],
-    "complementaire": None,
-    "resultat": None
-}
-
 etat = "menu_principal"
 
 running = True
@@ -64,7 +51,7 @@ while running:
                     etat = "menu_jeux"
             elif etat == "menu_jeux":
                 if button_loto.collidepoint(event.pos):
-                    etat = "loto"
+                    loto_run(fenetre)
                 elif button_chifoumi.collidepoint(event.pos):
                     chifoumi_run(fenetre)
                 elif button_blackjack.collidepoint(event.pos):
@@ -77,8 +64,6 @@ while running:
                     machine_sous_run(fenetre)
                 elif button_de.collidepoint(event.pos):
                     sim_de_run(fenetre)
-            elif etat == "loto":
-                loto_update(fenetre, event, loto_data)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -109,8 +94,6 @@ while running:
         fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 80, button_bm.y + 25))
         fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 80, button_de.y + 25))
 
-    elif etat == "loto":
-        loto_update(fenetre, None, loto_data)
     pygame.display.flip()
 
 pygame.quit()
