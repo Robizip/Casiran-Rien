@@ -3,7 +3,7 @@ import random #type: ignore
 from loto import loto_update  
 from pfc import chifoumi as chifoumi_run
 from blackjack import blackjack as blackjack_run
-# from roulette import roulette as roulette_run
+from roulette import roulette as roulette_run
 from bandit_manchot import machine_sous as machine_sous_run
 from simulateur_de_dé import sim_de as sim_de_run
 from Expulsion_Election import bataillepolitique as bataillepolitique_run
@@ -69,8 +69,8 @@ while running:
                     chifoumi_run(fenetre)
                 elif button_blackjack.collidepoint(event.pos):
                     blackjack_run(fenetre)
-                # elif button_roulette.collidepoint(event.pos):
-                #     roulette_run(fenetre)
+                elif button_roulette.collidepoint(event.pos):
+                    roulette_run(fenetre)
                 elif button_bp.collidepoint(event.pos):
                    bataillepolitique_run(fenetre) 
                 elif button_bm.collidepoint(event.pos):
@@ -104,7 +104,7 @@ while running:
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 80, button_loto.y + 25))
         fenetre.blit(font.render("Blackjack", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
-        # fenetre.blit(font.render("Roulette", True, WHITE), (button_roulette.x + 80, button_roulette.y + 25))
+        fenetre.blit(font.render("Roulette", True, WHITE), (button_roulette.x + 80, button_roulette.y + 25))
         fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 80, button_bp.y + 25))
         fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 80, button_bm.y + 25))
         fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 80, button_de.y + 25))
