@@ -6,7 +6,7 @@ RED = (200, 50, 50)
 GREEN = (50, 200, 50)
 GREY = (180, 180, 180)
 DARK = (30, 30, 30)
-YELLOW = (255, 215, 0)
+YELLOW = (255, 215, 0) 
 
 
 def machine_sous(fenetre):
