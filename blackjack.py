@@ -44,7 +44,7 @@ def blackjack(fenetre):
                     texte_saisi += event.unicode
 
         fenetre.fill(DARK)
-        titre = font.render("Blackjack", True, WHITE)
+        titre = font.render("Blackjack Lite", True, WHITE)
         fenetre.blit(titre, (fenetre.get_width() // 2 - titre.get_width() // 2, 100))
 
         label = font_small.render("Combien misez-vous ?", True, GREY)
