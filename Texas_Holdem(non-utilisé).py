@@ -1,4 +1,6 @@
 # Créé par Benjamin Castel, le 29/09/2025 en Python 3.7
+""" JEU NON UTILISÉ ET NON FINI """
+
 import random
 argent = 10
 def texassetup():
