@@ -158,7 +158,7 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_bm)
         pygame.draw.rect(fenetre, BLUE, button_de)
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 80, button_loto.y + 25))
-        fenetre.blit(font.render("Blackjack", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
+        fenetre.blit(font.render("Blackjack Lite", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
         fenetre.blit(font.render("Roulette", True, WHITE), (button_roulette.x + 80, button_roulette.y + 25))
         fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 80, button_bp.y + 25))
