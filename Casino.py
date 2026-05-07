@@ -106,7 +106,6 @@ while running:
                     fenetre.blit(close, (270, 340))
                     
                 elif button_argent.collidepoint(event.pos):
-                    champ_actif = "argent"
                     popup_ouvert = True
                 elif input_argent.collidepoint(event.pos):
                     champ_actif = "argent"
