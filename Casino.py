@@ -76,9 +76,8 @@ while running:
                     etat = "creation"
 
             elif etat == "menu_jeux":
-                if event.key == pygame.K_ESCAPE:
-                    popup_open = False
-                if popup_open:
+                
+                if popup_ouvert:
 
         # Fond transparent sombre
                     overlay = pygame.Surface((800, 600))
@@ -101,6 +100,7 @@ while running:
 
                     close = font.render("Echap pour fermer", True, RED)
                     fenetre.blit(close, (270, 340))
+                    
                 elif button_argent.collidepoint(event.pos):
                     champ_actif = "argent"
                     popup_ouvert = True
