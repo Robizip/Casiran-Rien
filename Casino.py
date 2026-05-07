@@ -80,35 +80,13 @@ while running:
                     etat = "creation"
 
             elif etat == "menu_jeux":
-                
-                if popup_ouvert:
 
-        # Fond transparent sombre
-                    overlay = pygame.Surface((800, 600))
-                    overlay.set_alpha(180)
-                    overlay.fill((0, 0, 0))
-                    fenetre.blit(overlay, (0, 0))
-
-        # Fenêtre popup
-                    popup_rect = pygame.Rect(200, 150, 400, 250)
-
-                    pygame.draw.rect(fenetre, GREY, popup_rect)
-                    pygame.draw.rect(fenetre, WHITE, popup_rect, 3)
-
-        # Texte popup
-                    title = font.render("ARGENT", True, WHITE)
-                    fenetre.blit(title, (350, 180))
-
-                    msg = font.render("Combien d'argent voulez vous ajouté à votre compte ?", True, WHITE)
-                    fenetre.blit(msg, (320, 260))
-
-                    close = font.render("Echap pour fermer", True, RED)
-                    fenetre.blit(close, (270, 340))
                     
-                elif button_argent.collidepoint(event.pos):
+                if button_argent.collidepoint(event.pos):
                     popup_ouvert = True
                 elif input_argent.collidepoint(event.pos):
                     champ_actif = "argent"
+                    popup_ouvert = True
                 elif button_loto.collidepoint(event.pos):
                     loto_run(fenetre)
                 elif button_chifoumi.collidepoint(event.pos):
@@ -123,6 +101,21 @@ while running:
                     machine_sous_run(fenetre)
                 elif button_de.collidepoint(event.pos):
                     sim_de_run(fenetre)
+                elif popup_ouvert == True:
+                    print("cadadadada")
+                    overlay = pygame.Surface((800, 600))
+                    overlay.set_alpha(180)
+                    overlay.fill((0, 0, 0))
+                    fenetre.blit(overlay, (0, 0))
+                    popup_rect = pygame.Rect(200, 150, 400, 250)
+                    pygame.draw.rect(fenetre, GREY, popup_rect)
+                    pygame.draw.rect(fenetre, WHITE, popup_rect, 3)
+                    title = font.render("ARGENT", True, WHITE)
+                    fenetre.blit(title, (350, 180))
+                    msg = font.render("Combien d'argent voulez vous ajouté à votre compte ?", True, WHITE)
+                    fenetre.blit(msg, (320, 260))
+                    close = font.render("Echap pour fermer", True, RED)
+                    fenetre.blit(close, (270, 340))
                 
 
             elif etat == "connexion":
