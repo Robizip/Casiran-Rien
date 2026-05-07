@@ -7,6 +7,7 @@ from roulette import roulette as roulette_run
 from bandit_manchot import machine_sous as machine_sous_run
 from simulateur_de_dé import sim_de as sim_de_run
 from Expulsion_Election import bataillepolitique as bataillepolitique_run
+
 pygame.init()
 
 # couleurs
@@ -40,16 +41,16 @@ button_roulette = pygame.Rect(300, 440, 300, 80)
 button_bp = pygame.Rect(300, 560, 300, 80)
 button_bm = pygame.Rect(300, 680, 300, 80)
 button_de = pygame.Rect(300, 800, 300, 80)
+button_argent = pygame.Rect(60, 130, 200, 80)
+input_argent = pygame.Rect(60, 230, 200, 40)
 input_pseudo = pygame.Rect(200, 200, 500, 40)
 input_mdp = pygame.Rect(200, 260, 500, 40)
 input_nom = pygame.Rect(200, 320, 500, 40)
 input_prenom = pygame.Rect(200, 380, 500, 40)
 button_valider_connect = pygame.Rect(200, 330, 220, 50)
 button_valider_create = pygame.Rect(200, 450, 220, 50)
-button_argent = pygame.Rect(60, 130, 200, 80)
 
-# Variable pour le menu, la connexion et la création de/des comptes
-txt_vide = ""
+# variables
 etat = "menu_principal"
 champ_actif = None
 pseudo = ""
@@ -57,8 +58,9 @@ mot_de_passe = ""
 nom = ""
 prenom = ""
 argent = ""
-
+argent_compte = 0
 running = True
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -71,9 +73,12 @@ while running:
                     etat = "connexion"
                 elif button_create.collidepoint(event.pos):
                     etat = "creation"
+
             elif etat == "menu_jeux":
                 if button_argent.collidepoint(event.pos):
-                    champ_actif = "Rentre l'argent"
+                    champ_actif = "argent"
+                elif input_argent.collidepoint(event.pos):
+                    champ_actif = "argent"
                 elif button_loto.collidepoint(event.pos):
                     loto_run(fenetre)
                 elif button_chifoumi.collidepoint(event.pos):
@@ -83,18 +88,19 @@ while running:
                 elif button_roulette.collidepoint(event.pos):
                     roulette_run(fenetre)
                 elif button_bp.collidepoint(event.pos):
-                   bataillepolitique_run(fenetre) 
+                    bataillepolitique_run(fenetre)
                 elif button_bm.collidepoint(event.pos):
                     machine_sous_run(fenetre)
                 elif button_de.collidepoint(event.pos):
                     sim_de_run(fenetre)
+
             elif etat == "connexion":
                 if input_pseudo.collidepoint(event.pos):
                     champ_actif = "pseudo"
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp"
                 elif button_valider_connect.collidepoint(event.pos):
-                    pass  # à brancher sur la base de données
+                    pass            
 
             elif etat == "creation":
                 if input_nom.collidepoint(event.pos):
@@ -106,12 +112,11 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp"
                 elif button_valider_create.collidepoint(event.pos):
-                    pass  # à brancher sur la base de données
-
+                    pass
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 etat = "menu_principal"
-            elif etat in ["connexion", "creation"] and champ_actif:
+            elif champ_actif:
                 if event.key == pygame.K_BACKSPACE:
                     if champ_actif == "pseudo":
                         pseudo = pseudo[:-1]
@@ -121,6 +126,8 @@ while running:
                         nom = nom[:-1]
                     elif champ_actif == "prenom":
                         prenom = prenom[:-1]
+                    elif champ_actif == "argent":
+                        argent = argent[:-1]
                 elif event.unicode:
                     if champ_actif == "pseudo":
                         pseudo += event.unicode
@@ -130,8 +137,14 @@ while running:
                         nom += event.unicode
                     elif champ_actif == "prenom":
                         prenom += event.unicode
+                    elif champ_actif == "argent":
+                        if event.unicode.isdigit():
+                            argent += event.unicode
+                            # variable reliée à la future base de donnée
+                            argent_compte = int(argent)
 
     fenetre.blit(fond, (0, 0))
+
     if etat == "menu_principal":
         pygame.draw.rect(fenetre, BLUE, button_menu)
         pygame.draw.rect(fenetre, DARK, button_connect)
@@ -175,14 +188,15 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_bm)
         pygame.draw.rect(fenetre, BLUE, button_de)
         pygame.draw.rect(fenetre, RED, button_argent)
+        fenetre.blit(font.render(argent, True, BLUE), (input_argent.x + 10, input_argent.y + 5))
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 80, button_loto.y + 25))
-        fenetre.blit(font.render("Blackjack Lite", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
+        fenetre.blit(font.render("Blackjack Lite", True, WHITE), (button_blackjack.x + 55, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
         fenetre.blit(font.render("Roulette", True, WHITE), (button_roulette.x + 80, button_roulette.y + 25))
-        fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 80, button_bp.y + 25))
-        fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 80, button_bm.y + 25))
-        fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 80, button_de.y + 25))
-        fenetre.blit(font.render("Argent", True, WHITE), (button_argent.x + 10, button_argent.y + 25))
+        fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 30, button_bp.y + 25))
+        fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 45, button_bm.y + 25))
+        fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 35, button_de.y + 25))
+        fenetre.blit(font.render("Argent", True, WHITE), (button_argent.x + 40, button_argent.y + 25))
 
     pygame.display.flip()
 
