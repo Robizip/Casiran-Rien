@@ -10,7 +10,6 @@ BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 YELLOW = (255, 215, 0)
 
-
 def roulette(fenetre):
     font = pygame.font.Font(None, 38)
     font_small = pygame.font.Font(None, 28)
