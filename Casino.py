@@ -57,8 +57,10 @@ button_valider_create = pygame.Rect(200, 450, 220, 50)
 # variables
 etat = "menu_principal"
 champ_actif = None
-pseudo = ""
-mot_de_passe = ""
+pseudo_creation = ""
+mot_de_passe_creation = ""
+pseudo_connexion = ""
+mot_de_passe_connexion = ""
 nom = ""
 prenom = ""
 argent = ""
@@ -120,11 +122,15 @@ while running:
 
             elif etat == "connexion":
                 if input_pseudo.collidepoint(event.pos):
-                    champ_actif = "pseudo"
+                    champ_actif = "pseudo_connexion"
                 elif input_mdp.collidepoint(event.pos):
-                    champ_actif = "mdp"
+                    champ_actif = "mdp_connexion"
                 elif button_valider_connect.collidepoint(event.pos):
-                    pass            
+                    verif = curseur.execute("SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?", (pseudo_connexion, mot_de_passe_connexion))           
+                    if verif.fetchone() :
+                        print("Bien")
+                    else :
+                        print("Pas Bien")
 
             elif etat == "creation":
                 if input_nom.collidepoint(event.pos):
@@ -132,9 +138,9 @@ while running:
                 elif input_prenom.collidepoint(event.pos):
                     champ_actif = "prenom"
                 elif input_pseudo.collidepoint(event.pos):
-                    champ_actif = "pseudo"
+                    champ_actif = "pseudo_creation"
                 elif input_mdp.collidepoint(event.pos):
-                    champ_actif = "mdp"
+                    champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
                     curseur.execute(
                     """
@@ -142,7 +148,7 @@ while running:
                     (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
                     VALUES (NULL, ?, ?, ?, ?, ?)
                     """,
-                    (pseudo, mot_de_passe, nom, prenom, 0)) # à brancher sur la base de données
+                    (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)) # à brancher sur la base de données
                     base_donnee.commit()
 
                     pass
@@ -151,10 +157,14 @@ while running:
                 etat = "menu_principal"
             elif champ_actif:
                 if event.key == pygame.K_BACKSPACE:
-                    if champ_actif == "pseudo":
-                        pseudo = pseudo[:-1]
-                    elif champ_actif == "mdp":
-                        mot_de_passe = mot_de_passe[:-1]
+                    if champ_actif == "pseudo_creation":
+                        pseudo_creation = pseudo_creation[:-1]                    
+                    if champ_actif == "pseudo_connexion":
+                        pseudo_connexion = pseudo_connexion[:-1]
+                    elif champ_actif == "mdp_creation":
+                        mot_de_passe_creation = mot_de_passe_creation[:-1]
+                    elif champ_actif == "mdp_connexion":
+                        mot_de_passe_connexion = mot_de_passe_connexion[:-1]
                     elif champ_actif == "nom":
                         nom = nom[:-1]
                     elif champ_actif == "prenom":
@@ -162,10 +172,14 @@ while running:
                     elif champ_actif == "argent":
                         argent = argent[:-1]
                 elif event.unicode:
-                    if champ_actif == "pseudo":
-                        pseudo += event.unicode
-                    elif champ_actif == "mdp":
-                        mot_de_passe += event.unicode
+                    if champ_actif == "pseudo_creation":
+                        pseudo_creation += event.unicode
+                    elif champ_actif == "mdp_creation":
+                        mot_de_passe_creation += event.unicode
+                    if champ_actif == "pseudo_connexion":
+                        pseudo_connexion += event.unicode
+                    elif champ_actif == "mdp_connexion":
+                        mot_de_passe_connexion += event.unicode
                     elif champ_actif == "nom":
                         nom += event.unicode
                     elif champ_actif == "prenom":
@@ -191,8 +205,8 @@ while running:
         pygame.draw.rect(fenetre, WHITE, input_mdp)
         fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
         fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
-        fenetre.blit(font.render(pseudo, True, BLUE), (210, 205))
-        fenetre.blit(font.render("*" * len(mot_de_passe), True, BLUE), (210, 265))
+        fenetre.blit(font.render(pseudo_connexion, True, BLUE), (210, 205))
+        fenetre.blit(font.render("*" * len(mot_de_passe_connexion), True, BLUE), (210, 265))
         pygame.draw.rect(fenetre, RED, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
 
@@ -207,8 +221,8 @@ while running:
         fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
         fenetre.blit(font.render(nom, True, BLUE), (210, 325))
         fenetre.blit(font.render(prenom, True, BLUE), (210, 385))
-        fenetre.blit(font.render(pseudo, True, BLUE), (210, 205))
-        fenetre.blit(font.render("*" * len(mot_de_passe), True, GREY), (210, 265))
+        fenetre.blit(font.render(pseudo_creation, True, BLUE), (210, 205))
+        fenetre.blit(font.render("*" * len(mot_de_passe_creation), True, GREY), (210, 265))
         pygame.draw.rect(fenetre, DARK, button_valider_create)
         fenetre.blit(font.render("Créer", True, WHITE), (button_valider_create.x + 70, button_valider_create.y + 12))
 
