@@ -15,7 +15,7 @@ def machine_sous(fenetre):
     font_small = pygame.font.Font(None, 28)
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
-    symboles = ["🍒", "🍋", "🍊", "🍇", "🍉", "🍀", "🔔", "💎", "⭐", "7"]
+    symboles = [":)", "Ø", ":(", "•", "€", "$", "#", "&", "<>", "7"]
     tirage = None
     message = ""
     couleur_msg = WHITE
@@ -33,7 +33,7 @@ def machine_sous(fenetre):
                     unique = list(set(tirage))
                     if len(unique) == 1:
                         if unique[0] == "7":
-                            message = "🎰 JACKPOT !!! 🎰"
+                            message = " JACKPOT !!! "
                             couleur_msg = YELLOW
                         else:
                             message = f"Bravo, 3 {unique[0]} identiques !"
