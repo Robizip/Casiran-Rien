@@ -1,5 +1,6 @@
 import pygame
 import random #type: ignore
+import sqlite3
 from loto import loto as loto_run
 from pfc import chifoumi as chifoumi_run
 from blackjack import blackjack as blackjack_run
@@ -9,6 +10,9 @@ from simulateur_de_dé import sim_de as sim_de_run
 from Expulsion_Election import bataillepolitique as bataillepolitique_run
 
 pygame.init()
+
+base_donnee = sqlite3.connect("BaseDonnéeCasino.db")
+curseur = base_donnee.cursor()
 
 # couleurs
 WHITE = (255, 255, 255)
@@ -140,6 +144,15 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp"
                 elif button_valider_create.collidepoint(event.pos):
+                    curseur.execute(
+                    """
+                    INSERT INTO Base_Données_Comptes
+                    (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
+                    VALUES (NULL, ?, ?, ?, ?, ?)
+                    """,
+                    (pseudo, mot_de_passe, nom, prenom, 0)) # à brancher sur la base de données
+                    base_donnee.commit()
+
                     pass
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
