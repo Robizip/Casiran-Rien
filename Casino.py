@@ -13,6 +13,9 @@ pygame.init()
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 DARK = (30, 30, 30)
+RED = (200, 50, 50)
+GREEN = (50, 200, 50)
+GREY = (180, 180, 180)
 
 # fenêtre
 fenetre = pygame.display.set_mode((900, 900))
@@ -43,6 +46,7 @@ input_nom = pygame.Rect(200, 320, 500, 40)
 input_prenom = pygame.Rect(200, 380, 500, 40)
 button_valider_connect = pygame.Rect(200, 330, 220, 50)
 button_valider_create = pygame.Rect(200, 450, 220, 50)
+button_argent = pygame.Rect(60, 130, 200, 80)
 
 # Variable pour le menu, la connexion et la création de/des comptes
 txt_vide = ""
@@ -52,6 +56,7 @@ pseudo = ""
 mot_de_passe = ""
 nom = ""
 prenom = ""
+argent = ""
 
 running = True
 while running:
@@ -67,7 +72,9 @@ while running:
                 elif button_create.collidepoint(event.pos):
                     etat = "creation"
             elif etat == "menu_jeux":
-                if button_loto.collidepoint(event.pos):
+                if button_argent.collidepoint(event.pos):
+                    champ_actif = "Rentre l'argent"
+                elif button_loto.collidepoint(event.pos):
                     loto_run(fenetre)
                 elif button_chifoumi.collidepoint(event.pos):
                     chifoumi_run(fenetre)
@@ -134,29 +141,29 @@ while running:
         fenetre.blit(font.render("Accéder aux jeux", True, WHITE), (button_menu.x + 50, button_menu.y + 25))
 
     elif etat == "connexion":
-        pygame.draw.rect(fenetre, WHITE, input_pseudo, 2)
-        pygame.draw.rect(fenetre, WHITE, input_mdp, 2)
-        fenetre.blit(font.render("Pseudo :", True, WHITE), (200, 170))
-        fenetre.blit(font.render("Mot de passe :", True, WHITE), (200, 230))
-        fenetre.blit(font.render(pseudo, True, DARK), (210, 205))
-        fenetre.blit(font.render("*" * len(mot_de_passe), True, DARK), (210, 265))
-        pygame.draw.rect(fenetre, BLUE, button_valider_connect)
+        pygame.draw.rect(fenetre, WHITE, input_pseudo)
+        pygame.draw.rect(fenetre, WHITE, input_mdp)
+        fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
+        fenetre.blit(font.render(pseudo, True, BLUE), (210, 205))
+        fenetre.blit(font.render("*" * len(mot_de_passe), True, BLUE), (210, 265))
+        pygame.draw.rect(fenetre, RED, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
 
     elif etat == "creation":
-        pygame.draw.rect(fenetre, WHITE, input_nom, 2)
-        pygame.draw.rect(fenetre, WHITE, input_prenom, 2)
-        pygame.draw.rect(fenetre, WHITE, input_pseudo, 2)
-        pygame.draw.rect(fenetre, WHITE, input_mdp, 2)
-        fenetre.blit(font.render("Nom :", True, WHITE), (200, 290))
-        fenetre.blit(font.render("Prénom :", True, WHITE), (200, 350))
-        fenetre.blit(font.render("Pseudo :", True, WHITE), (200, 170))
-        fenetre.blit(font.render("Mot de passe :", True, WHITE), (200, 230))
-        fenetre.blit(font.render(nom, True, DARK), (210, 325))
-        fenetre.blit(font.render(prenom, True, DARK), (210, 385))
-        fenetre.blit(font.render(pseudo, True, DARK), (210, 205))
-        fenetre.blit(font.render("*" * len(mot_de_passe), True, DARK), (210, 265))
-        pygame.draw.rect(fenetre, BLUE, button_valider_create)
+        pygame.draw.rect(fenetre, WHITE, input_nom)
+        pygame.draw.rect(fenetre, WHITE, input_prenom)
+        pygame.draw.rect(fenetre, WHITE, input_pseudo)
+        pygame.draw.rect(fenetre, WHITE, input_mdp)
+        fenetre.blit(font.render("Nom :", True, BLUE), (200, 290))
+        fenetre.blit(font.render("Prénom :", True, BLUE), (200, 350))
+        fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
+        fenetre.blit(font.render(nom, True, BLUE), (210, 325))
+        fenetre.blit(font.render(prenom, True, BLUE), (210, 385))
+        fenetre.blit(font.render(pseudo, True, BLUE), (210, 205))
+        fenetre.blit(font.render("*" * len(mot_de_passe), True, GREY), (210, 265))
+        pygame.draw.rect(fenetre, DARK, button_valider_create)
         fenetre.blit(font.render("Créer", True, WHITE), (button_valider_create.x + 70, button_valider_create.y + 12))
 
     elif etat == "menu_jeux":
@@ -167,6 +174,7 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_bp)
         pygame.draw.rect(fenetre, BLUE, button_bm)
         pygame.draw.rect(fenetre, BLUE, button_de)
+        pygame.draw.rect(fenetre, RED, button_argent)
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 80, button_loto.y + 25))
         fenetre.blit(font.render("Blackjack Lite", True, WHITE), (button_blackjack.x + 80, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
@@ -174,6 +182,7 @@ while running:
         fenetre.blit(font.render("Bataille Politique", True, WHITE), (button_bp.x + 80, button_bp.y + 25))
         fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 80, button_bm.y + 25))
         fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 80, button_de.y + 25))
+        fenetre.blit(font.render("Argent", True, WHITE), (button_argent.x + 10, button_argent.y + 25))
 
     pygame.display.flip()
 
