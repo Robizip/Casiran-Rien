@@ -152,7 +152,7 @@ def roulette(fenetre):
             fenetre.blit(font_small.render(f"Solde : {argent}$", True, YELLOW), (40, 30))
             fenetre.blit(font_small.render("Mises placées :", True, GREY), (40, 90))
             for i in range(0, len(bets), 2):
-                ligne = f"{bets[i]}  →  {bets[i + 1]}$"
+                ligne = f"{bets[i]}  pour  {bets[i + 1]}$"
                 fenetre.blit(font_small.render(ligne, True, WHITE), (40, 120 + (i // 2) * 28))
 
             if etape == "categorie":
@@ -190,14 +190,14 @@ def roulette(fenetre):
             if isinstance(pari, int) and pari == number:
                 gain = montant * 36
                 argent += gain
-                resultats.append(f"Gagné ! Numéro {pari} à {gain}$")
+                resultats.append(f"Gagné ! Numéro de {pari} à {gain}$")
             elif isinstance(pari, str) and pari == color:
                 gain = montant * 2
                 argent += gain
-                resultats.append(f"Gagné ! Couleur {color} à {gain}$")
+                resultats.append(f"Gagné ! Couleur de {color} à {gain}$")
             else:
                 resultats.append(f"Perdu sur {pari}.")
-        resultats.append(f"Solde : {startmoney}$ à {argent}$")
+        resultats.append(f"Solde : de {startmoney}$ à {argent}$")
 
         # ── écran résultat ────────────────────────────────────────────────
         rejouer = ""
@@ -224,7 +224,7 @@ def roulette(fenetre):
                         elif r == "non":
                             return
                         else:
-                            erreur = "Tapez yes ou non."
+                            erreur = "Tapez oui ou non."
                     else:
                         rejouer += event.unicode
 
