@@ -78,7 +78,7 @@ def bataillepolitique(fenetre):
     # ── Phase 2 : combat ───────────────────────────────────────────────────
     possiblemort = [
         "meurt en glissant sur une flaque",
-        "meurt en prétant allégence",
+        "meurt en prétant allégence à Irsraël",
         "a bu trop de boisson splashbot",
         "se prend un coup du crâne à lylian",
         "s'est fait 3 couronnes",
@@ -93,6 +93,28 @@ def bataillepolitique(fenetre):
         "s'est fait cancel",
         "a été retrouvé sur les fichiers Epstein",
         "meurt",
+        "pleure sur la musique de TiboInshape",
+        "s'étouffe avec un bouzelouf",
+        "se prend un contrôle de Juan Jose Trivess Segura",
+        "se perd dans sa récursivité",
+        "se fait juger par Charle",
+        "finit dans la voiture de Nordahl Lelandais",
+        "finit sous la terrasse de Xavier Dupont de Ligonnès",
+        "fini fan de Hazbin hotel",
+        "défend les lolis sur Reddit",
+        "se reconvertit en influenceur OnlyFacts",
+        "intègre la plèbe",
+        "rate le cours de NSI",
+        "part danser avec King Nasir",
+        "s'est fait Charlie Kirk",
+        "doit aller prendre sa douche",
+        "se fait appeler par sa maman",
+        "rentre chez eux en pleurant",
+        "a de la diarhée dans les chaussettes",
+        "se fait rachetté par Elon Musk",
+        "s'est pris une JFK",
+        "a détourné un peu d'argent",
+        "esquive ses impots à Malte",
     ]
 
     combattans = {}
