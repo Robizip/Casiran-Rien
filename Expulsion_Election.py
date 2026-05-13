@@ -97,10 +97,10 @@ def bataillepolitique(fenetre):
         "s'étouffe avec un bouzelouf",
         "se prend un contrôle de Juan Jose Trivess Segura",
         "se perd dans sa récursivité",
-        "se fait juger par Charle",
+        "se fait juger par Charles",
         "finit dans la voiture de Nordahl Lelandais",
         "finit sous la terrasse de Xavier Dupont de Ligonnès",
-        "fini fan de Hazbin hotel",
+        "finit fan de Hazbin hotel",
         "défend les lolis sur Reddit",
         "se reconvertit en influenceur OnlyFacts",
         "intègre la plèbe",
@@ -191,7 +191,7 @@ def bataillepolitique(fenetre):
         fenetre.fill(DARK)
 
         for i, msg in enumerate(messages[scroll_offset:scroll_offset + visible]):
-            couleur = GREEN if "vainqueur" in msg or "parié sur" in msg else RED if "meurt" in msg or "quitte" in msg or "s'est" in msg or "compresser" in msg or "cancel" in msg or "Epstein" in msg or "discord" in msg or "ABR" in msg or "paisiblement" in msg or "table" in msg or "4chan" in msg or "lylian" in msg or "couronnes" in msg or "splashbot" in msg or "allégence" in msg or "glissant" in msg or "Saadi" in msg else WHITE
+            couleur = GREEN if "vainqueur" in msg or "parié sur" in msg else RED if "meurt" in msg or "plèbe" or "peu" in msg or "impots" in msg or "eux" in msg or "dans" in msg or "JFK" in msg or in msg or "sa" in msg or "" "douche" in msg or "NSI" in msg or "King" in msg or "" "plèbe" in msg or "Reddit" in msg or "finit" in msg or "se" in msg or "bouzelouf" in msg or "pleure" in msg or "quitte" in msg or "s'est" in msg or "compresser" in msg or "cancel" in msg or "Epstein" in msg or "discord" in msg or "ABR" in msg or "paisiblement" in msg or "table" in msg or "4chan" in msg or "lylian" in msg or "couronnes" in msg or "splashbot" in msg or "allégence" in msg or "glissant" in msg or "Saadi" in msg else WHITE
             surf = font_small.render(msg, True, couleur)
             fenetre.blit(surf, (40, 20 + i * ligne_h))
 
