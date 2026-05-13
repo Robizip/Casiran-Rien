@@ -181,6 +181,16 @@ while running:
                         if event.unicode.isdigit():
                             argent += event.unicode
                             argent_compte = int(argent)
+                            
+                            # Requête SQL pour update l’argent du compte connecté
+                            curseur.execute(
+                                """
+                                UPDATE Base_Données_Comptes
+                                SET Argent = Argent + ?
+                                WHERE 
+                                """,
+                                argent_compte)
+                            base_donnee.commit()
 
     # ── affichage ─────────────────────────────────────────────────────────
     fenetre.blit(fond, (0, 0))
@@ -197,7 +207,7 @@ while running:
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
         pygame.draw.rect(fenetre, WHITE, input_mdp)
         fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
-        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 235))
         fenetre.blit(font.render(pseudo_connexion, True, BLUE), (210, 205))
         fenetre.blit(font.render("*" * len(mot_de_passe_connexion), True, BLUE), (210, 265))
         pygame.draw.rect(fenetre, RED, button_valider_connect)
