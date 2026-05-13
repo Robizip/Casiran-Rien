@@ -34,7 +34,7 @@ fond = pygame.transform.scale(fond, fenetre.get_size())
 # font
 font = pygame.font.Font(None, 36)
 
-# boutons menu
+# boutons
 button_create = pygame.Rect(10, 180, 200, 60)
 button_connect = pygame.Rect(10, 100, 200, 60)
 button_menu = pygame.Rect(300, 250, 300, 80)
@@ -46,6 +46,7 @@ button_bp = pygame.Rect(300, 560, 300, 80)
 button_bm = pygame.Rect(300, 680, 300, 80)
 button_de = pygame.Rect(300, 800, 300, 80)
 button_argent = pygame.Rect(60, 130, 200, 80)
+button_valider_argent = pygame.Rect(350, 330, 200, 45)
 input_argent_popup = pygame.Rect(350, 270, 200, 40)
 input_pseudo = pygame.Rect(200, 200, 500, 40)
 input_mdp = pygame.Rect(200, 260, 500, 40)
@@ -86,6 +87,10 @@ while running:
                 if popup_ouvert:
                     if input_argent_popup.collidepoint(event.pos):
                         champ_actif = "argent"
+                    elif button_valider_argent.collidepoint(event.pos):
+                        pass  # à brancher sur la base de données
+                        popup_ouvert = False
+                        champ_actif = None
                 else:
                     if button_argent.collidepoint(event.pos):
                         popup_ouvert = True
@@ -181,16 +186,6 @@ while running:
                         if event.unicode.isdigit():
                             argent += event.unicode
                             argent_compte = int(argent)
-                            
-                            # Requête SQL pour update l’argent du compte connecté
-                            curseur.execute(
-                                """
-                                UPDATE Base_Données_Comptes
-                                SET Argent = Argent + ?
-                                WHERE 
-                                """,
-                                argent_compte)
-                            base_donnee.commit()
 
     # ── affichage ─────────────────────────────────────────────────────────
     fenetre.blit(fond, (0, 0))
@@ -207,7 +202,7 @@ while running:
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
         pygame.draw.rect(fenetre, WHITE, input_mdp)
         fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
-        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 235))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
         fenetre.blit(font.render(pseudo_connexion, True, BLUE), (210, 205))
         fenetre.blit(font.render("*" * len(mot_de_passe_connexion), True, BLUE), (210, 265))
         pygame.draw.rect(fenetre, RED, button_valider_connect)
@@ -258,7 +253,9 @@ while running:
             fenetre.blit(font.render("Montant :", True, GREY), (220, 275))
             pygame.draw.rect(fenetre, WHITE, input_argent_popup)
             fenetre.blit(font.render(argent, True, DARK), (input_argent_popup.x + 10, input_argent_popup.y + 5))
-            fenetre.blit(font.render("Échap pour fermer", True, RED), (270, 370))
+            pygame.draw.rect(fenetre, GREEN, button_valider_argent)
+            fenetre.blit(font.render("Valider", True, WHITE), (button_valider_argent.x + 55, button_valider_argent.y + 10))
+            fenetre.blit(font.render("Échap pour fermer", True, RED), (270, 390))
 
     pygame.display.flip()
 
