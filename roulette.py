@@ -10,7 +10,7 @@ BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 YELLOW = (255, 215, 0)
 
-RED_NUMBERS = {
+nombre_rouge = {
     1, 3, 5, 7, 9, 12, 14, 16, 18,
     19, 21, 23, 25, 27, 30, 32, 34, 36
 }
@@ -95,7 +95,7 @@ def roulette(fenetre):
                         # ── catégorie ──
                         if etape == "categorie":
                             c = choix_cat.strip().lower()
-                            if c in ("red", "black"):
+                            if c in ("rouge", "noir", "vert"):
                                 cat_temp = c
                                 etape = "montant"
                                 erreur = ""
@@ -104,7 +104,7 @@ def roulette(fenetre):
                                 etape = "montant"
                                 erreur = ""
                             else:
-                                erreur = "Entrez un numéro (0-36) ou red/black."
+                                erreur = "Entrez un numéro (0-36) ou rouge/noir/vert."
                         # ── montant ──
                         elif etape == "montant":
                             try:
@@ -130,14 +130,14 @@ def roulette(fenetre):
                         # ── encore ──
                         elif etape == "encore":
                             e = encore.strip().lower()
-                            if e == "yes":
+                            if e == "oui":
                                 encore = ""
                                 etape = "categorie"
                                 erreur = ""
-                            elif e == "no":
+                            elif e == "non":
                                 phase_mise = False
                             else:
-                                erreur = "Tapez yes ou no."
+                                erreur = "Tapez oui ou non."
                     else:
                         if etape == "categorie":
                             choix_cat += event.unicode
@@ -156,13 +156,13 @@ def roulette(fenetre):
                 fenetre.blit(font_small.render(ligne, True, WHITE), (40, 120 + (i // 2) * 28))
 
             if etape == "categorie":
-                label = "Numéro (0-36) ou couleur (red/black) :"
+                label = "Numéro (0-36) ou couleur (rouge/noir/vert) :"
                 valeur = choix_cat
             elif etape == "montant":
                 label = f"Combien misez-vous ? (max {argent}$)"
                 valeur = choix_montant
             else:
-                label = "Encore une mise ? (yes/no)"
+                label = "Encore une mise ? (oui/non)"
                 valeur = encore
 
             fenetre.blit(font_small.render(label, True, GREY), (40, 420))
@@ -177,11 +177,11 @@ def roulette(fenetre):
         # ── tirage ────────────────────────────────────────────────────────
         number = random.randint(0, 36)
         if number == 0:
-            color = "green"
-        elif number in RED_NUMBERS:
-            color = "red"
+            color = "vert"
+        elif number in nombre_rouge:
+            color = "rouge"
         else:
-            color = "black"
+            color = "noir"
 
         resultats = [f"La bille tombe sur : {number} ({color})"]
         for i in range(0, len(bets), 2):
@@ -190,11 +190,11 @@ def roulette(fenetre):
             if isinstance(pari, int) and pari == number:
                 gain = montant * 36
                 argent += gain
-                resultats.append(f"Gagné ! Numéro {pari} → +{gain}$")
+                resultats.append(f"Gagné ! Numéro {pari} +{gain}$")
             elif isinstance(pari, str) and pari == color:
                 gain = montant * 2
                 argent += gain
-                resultats.append(f"Gagné ! Couleur {color} → +{gain}$")
+                resultats.append(f"Gagné ! Couleur {color} +{gain}$")
             else:
                 resultats.append(f"Perdu sur {pari}.")
         resultats.append(f"Solde : {startmoney}$ → {argent}$")
