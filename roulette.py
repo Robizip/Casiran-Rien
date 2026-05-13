@@ -152,7 +152,7 @@ def roulette(fenetre):
             fenetre.blit(font_small.render(f"Solde : {argent}$", True, YELLOW), (40, 30))
             fenetre.blit(font_small.render("Mises placées :", True, GREY), (40, 90))
             for i in range(0, len(bets), 2):
-                ligne = f"{bets[i]}  →  {bets[i + 1]}$"
+                ligne = f"{bets[i]}  pour  {bets[i + 1]}$"
                 fenetre.blit(font_small.render(ligne, True, WHITE), (40, 120 + (i // 2) * 28))
 
             if etape == "categorie":
