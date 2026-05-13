@@ -129,6 +129,7 @@ while running:
                     verif = curseur.execute("SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?", (pseudo_connexion, mot_de_passe_connexion))           
                     if verif.fetchone() :
                         print("Bien")
+                        print("Vous êtes désormais connecter !")
                     else :
                         print("Pas Bien")
 
