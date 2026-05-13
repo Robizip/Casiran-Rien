@@ -61,6 +61,7 @@ pseudo_creation = ""
 mot_de_passe_creation = ""
 pseudo_connexion = ""
 mot_de_passe_connexion = ""
+message_connexion = ""
 nom = ""
 prenom = ""
 argent = ""
@@ -116,9 +117,14 @@ while running:
                         (pseudo_connexion, mot_de_passe_connexion)
                     )
                     if verif.fetchone():
+                        message_connexion = "Vous êtes connecté :D\nAppuyez sur Échap"
                         print("Vous êtes désormais connecté !")
+                        compte_connecte = pseudo_connexion
                     else:
-                        print("Pseudo ou mot de passe incorrect.")
+                        message_connexion = "Pseudo ou mot de passe incorrect."
+                        compte_connecte = ""
+                    pseudo_connexion = ""
+                    mot_de_passe_connexion = ""
 
             elif etat == "creation":
                 if input_nom.collidepoint(event.pos):
@@ -187,9 +193,9 @@ while running:
                                 """
                                 UPDATE Base_Données_Comptes
                                 SET Argent = Argent + ?
-                                WHERE 
+                                WHERE Pseudo = ?
                                 """,
-                                argent_compte)
+                                (argent_compte,compte_connecte))
                             base_donnee.commit()
 
     # ── affichage ─────────────────────────────────────────────────────────
@@ -212,6 +218,9 @@ while running:
         fenetre.blit(font.render("*" * len(mot_de_passe_connexion), True, BLUE), (210, 265))
         pygame.draw.rect(fenetre, RED, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
+        if message_connexion != "":
+            texte_message = font.render(message_connexion, True, GREY)
+            fenetre.blit(texte_message, (button_valider_connect.x, button_valider_connect.y + 70))
 
     elif etat == "creation":
         pygame.draw.rect(fenetre, WHITE, input_nom)
