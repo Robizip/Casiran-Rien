@@ -60,7 +60,7 @@ input_nom = pygame.Rect(200, 320, 500, 40)
 input_prenom = pygame.Rect(200, 380, 500, 40)
 button_valider_connect = pygame.Rect(200, 330, 220, 50)
 button_valider_create = pygame.Rect(200, 450, 220, 50)
-coin_compte = pygame.Rect(800,0,100+max(len("Pseudo ="+compte_connecte),len("Argent="+str(argent_compte))),100)
+coin_compte = pygame.Rect(600,0,120,80)
 
 # variables
 etat = "menu_principal"
@@ -135,8 +135,9 @@ while running:
                                                               SELECT Argent
                                                               FROM Base_Données_Comptes
                                                               WHERE Pseudo = ?""",
-                                                              compte_connecte)
+                                                              (compte_connecte,))
                         argent_compte = argent_stock_compte.fetchone()[0]
+                        coin_compte = pygame.Rect(600,0,100+max(len("Pseudo ="+compte_connecte)+20,len("Argent="+str(argent_compte))+20),80)
                     else:
                         message_connexion = "Pseudo ou mot de passe incorrect."
                         compte_connecte = ""
@@ -226,10 +227,13 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_menu)
         pygame.draw.rect(fenetre, DARK, button_connect)
         pygame.draw.rect(fenetre, DARK, button_create)
-        pygame.draw.rect(fenetre,BLUE, coin_compte)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_connect.x + 20, button_connect.y + 15))
         fenetre.blit(font.render("Créer un compte", True, WHITE), (button_create.x + 5, button_create.y + 15))
         fenetre.blit(font.render("Accéder aux jeux", True, WHITE), (button_menu.x + 50, button_menu.y + 25))
+
+        pygame.draw.rect(fenetre,BLUE, coin_compte)
+        fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
+        fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
 
     elif etat == "connexion":
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
@@ -240,9 +244,9 @@ while running:
         fenetre.blit(font.render("*" * len(mot_de_passe_connexion), True, BLUE), (210, 265))
         pygame.draw.rect(fenetre, RED, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
+        
         if message_connexion != "":
             texte_message = font.render(message_connexion, True, WHITE)
-
             fenetre.blit(texte_message, (button_valider_connect.x, button_valider_connect.y + 70))
 
     elif etat == "creation":
