@@ -46,7 +46,7 @@ button_bp = pygame.Rect(300, 560, 300, 80)
 button_bm = pygame.Rect(300, 680, 300, 80)
 button_de = pygame.Rect(300, 800, 300, 80)
 button_argent = pygame.Rect(60, 130, 200, 80)
-input_argent = pygame.Rect(60, 230, 200, 40)
+input_argent_popup = pygame.Rect(350, 270, 200, 40)
 input_pseudo = pygame.Rect(200, 200, 500, 40)
 input_mdp = pygame.Rect(200, 260, 500, 40)
 input_nom = pygame.Rect(200, 320, 500, 40)
@@ -72,6 +72,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if etat == "menu_principal":
                 if button_menu.collidepoint(event.pos):
@@ -82,43 +83,27 @@ while running:
                     etat = "creation"
 
             elif etat == "menu_jeux":
-
-                    
-                if button_argent.collidepoint(event.pos):
-                    popup_ouvert = True
-                elif input_argent.collidepoint(event.pos):
-                    champ_actif = "argent"
-                    popup_ouvert = True
-                elif button_loto.collidepoint(event.pos):
-                    loto_run(fenetre)
-                elif button_chifoumi.collidepoint(event.pos):
-                    chifoumi_run(fenetre)
-                elif button_blackjack.collidepoint(event.pos):
-                    blackjack_run(fenetre)
-                elif button_roulette.collidepoint(event.pos):
-                    roulette_run(fenetre)
-                elif button_bp.collidepoint(event.pos):
-                    bataillepolitique_run(fenetre)
-                elif button_bm.collidepoint(event.pos):
-                    machine_sous_run(fenetre)
-                elif button_de.collidepoint(event.pos):
-                    sim_de_run(fenetre)
-                elif popup_ouvert == True:
-                    print("cadadadada")
-                    overlay = pygame.Surface((800, 600))
-                    overlay.set_alpha(180)
-                    overlay.fill((0, 0, 0))
-                    fenetre.blit(overlay, (0, 0))
-                    popup_rect = pygame.Rect(200, 150, 400, 250)
-                    pygame.draw.rect(fenetre, GREY, popup_rect)
-                    pygame.draw.rect(fenetre, WHITE, popup_rect, 3)
-                    title = font.render("ARGENT", True, WHITE)
-                    fenetre.blit(title, (350, 180))
-                    msg = font.render("Combien d'argent voulez vous ajouté à votre compte ?", True, WHITE)
-                    fenetre.blit(msg, (320, 260))
-                    close = font.render("Echap pour fermer", True, RED)
-                    fenetre.blit(close, (270, 340))
-                
+                if popup_ouvert:
+                    if input_argent_popup.collidepoint(event.pos):
+                        champ_actif = "argent"
+                else:
+                    if button_argent.collidepoint(event.pos):
+                        popup_ouvert = True
+                        champ_actif = "argent"
+                    elif button_loto.collidepoint(event.pos):
+                        loto_run(fenetre)
+                    elif button_chifoumi.collidepoint(event.pos):
+                        chifoumi_run(fenetre)
+                    elif button_blackjack.collidepoint(event.pos):
+                        blackjack_run(fenetre)
+                    elif button_roulette.collidepoint(event.pos):
+                        roulette_run(fenetre)
+                    elif button_bp.collidepoint(event.pos):
+                        bataillepolitique_run(fenetre)
+                    elif button_bm.collidepoint(event.pos):
+                        machine_sous_run(fenetre)
+                    elif button_de.collidepoint(event.pos):
+                        sim_de_run(fenetre)
 
             elif etat == "connexion":
                 if input_pseudo.collidepoint(event.pos):
@@ -126,11 +111,14 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_connexion"
                 elif button_valider_connect.collidepoint(event.pos):
-                    verif = curseur.execute("SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?", (pseudo_connexion, mot_de_passe_connexion))           
-                    if verif.fetchone() :
-                        print("Bien")
-                    else :
-                        print("Pas Bien")
+                    verif = curseur.execute(
+                        "SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?",
+                        (pseudo_connexion, mot_de_passe_connexion)
+                    )
+                    if verif.fetchone():
+                        print("Vous êtes désormais connecté !")
+                    else:
+                        print("Pseudo ou mot de passe incorrect.")
 
             elif etat == "creation":
                 if input_nom.collidepoint(event.pos):
@@ -143,23 +131,27 @@ while running:
                     champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
                     curseur.execute(
-                    """
-                    INSERT INTO Base_Données_Comptes
-                    (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
-                    VALUES (NULL, ?, ?, ?, ?, ?)
-                    """,
-                    (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)) # à brancher sur la base de données
+                        """
+                        INSERT INTO Base_Données_Comptes
+                        (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
+                        VALUES (NULL, ?, ?, ?, ?, ?)
+                        """,
+                        (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)
+                    )
                     base_donnee.commit()
 
-                    pass
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                etat = "menu_principal"
+                if popup_ouvert:
+                    popup_ouvert = False
+                    champ_actif = None
+                else:
+                    etat = "menu_principal"
             elif champ_actif:
                 if event.key == pygame.K_BACKSPACE:
                     if champ_actif == "pseudo_creation":
-                        pseudo_creation = pseudo_creation[:-1]                    
-                    if champ_actif == "pseudo_connexion":
+                        pseudo_creation = pseudo_creation[:-1]
+                    elif champ_actif == "pseudo_connexion":
                         pseudo_connexion = pseudo_connexion[:-1]
                     elif champ_actif == "mdp_creation":
                         mot_de_passe_creation = mot_de_passe_creation[:-1]
@@ -171,13 +163,14 @@ while running:
                         prenom = prenom[:-1]
                     elif champ_actif == "argent":
                         argent = argent[:-1]
+                        argent_compte = int(argent) if argent else 0
                 elif event.unicode:
                     if champ_actif == "pseudo_creation":
                         pseudo_creation += event.unicode
+                    elif champ_actif == "pseudo_connexion":
+                        pseudo_connexion += event.unicode
                     elif champ_actif == "mdp_creation":
                         mot_de_passe_creation += event.unicode
-                    if champ_actif == "pseudo_connexion":
-                        pseudo_connexion += event.unicode
                     elif champ_actif == "mdp_connexion":
                         mot_de_passe_connexion += event.unicode
                     elif champ_actif == "nom":
@@ -187,9 +180,19 @@ while running:
                     elif champ_actif == "argent":
                         if event.unicode.isdigit():
                             argent += event.unicode
-                            # variable reliée à la future base de donnée
                             argent_compte = int(argent)
+                            
+                            # Requête SQL pour update l’argent du compte connecté
+                            curseur.execute(
+                                """
+                                UPDATE Base_Données_Comptes
+                                SET Argent = Argent + ?
+                                WHERE 
+                                """,
+                                argent_compte)
+                            base_donnee.commit()
 
+    # ── affichage ─────────────────────────────────────────────────────────
     fenetre.blit(fond, (0, 0))
 
     if etat == "menu_principal":
@@ -204,7 +207,7 @@ while running:
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
         pygame.draw.rect(fenetre, WHITE, input_mdp)
         fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
-        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 235))
         fenetre.blit(font.render(pseudo_connexion, True, BLUE), (210, 205))
         fenetre.blit(font.render("*" * len(mot_de_passe_connexion), True, BLUE), (210, 265))
         pygame.draw.rect(fenetre, RED, button_valider_connect)
@@ -235,7 +238,6 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_bm)
         pygame.draw.rect(fenetre, BLUE, button_de)
         pygame.draw.rect(fenetre, RED, button_argent)
-        fenetre.blit(font.render(argent, True, BLUE), (input_argent.x + 10, input_argent.y + 5))
         fenetre.blit(font.render("Loto", True, WHITE), (button_loto.x + 80, button_loto.y + 25))
         fenetre.blit(font.render("Blackjack Lite", True, WHITE), (button_blackjack.x + 55, button_blackjack.y + 25))
         fenetre.blit(font.render("Chifoumi", True, WHITE), (button_chifoumi.x + 80, button_chifoumi.y + 25))
@@ -244,6 +246,19 @@ while running:
         fenetre.blit(font.render("Bandit Manchot", True, WHITE), (button_bm.x + 45, button_bm.y + 25))
         fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 35, button_de.y + 25))
         fenetre.blit(font.render("Argent", True, WHITE), (button_argent.x + 40, button_argent.y + 25))
+
+        if popup_ouvert:
+            overlay = pygame.Surface((900, 900), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 180))
+            fenetre.blit(overlay, (0, 0))
+            popup_rect = pygame.Rect(200, 200, 500, 250)
+            pygame.draw.rect(fenetre, DARK, popup_rect)
+            pygame.draw.rect(fenetre, WHITE, popup_rect, 3)
+            fenetre.blit(font.render("Ajouter de l'argent", True, WHITE), (270, 220))
+            fenetre.blit(font.render("Montant :", True, GREY), (220, 275))
+            pygame.draw.rect(fenetre, WHITE, input_argent_popup)
+            fenetre.blit(font.render(argent, True, DARK), (input_argent_popup.x + 10, input_argent_popup.y + 5))
+            fenetre.blit(font.render("Échap pour fermer", True, RED), (270, 370))
 
     pygame.display.flip()
 
