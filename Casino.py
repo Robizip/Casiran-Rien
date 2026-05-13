@@ -34,6 +34,12 @@ fond = pygame.transform.scale(fond, fenetre.get_size())
 # font
 font = pygame.font.Font(None, 36)
 
+# compte
+compte_connecte = ""
+
+# argent
+argent_compte = 0
+
 # boutons
 button_create = pygame.Rect(10, 180, 200, 60)
 button_connect = pygame.Rect(10, 100, 200, 60)
@@ -54,6 +60,7 @@ input_nom = pygame.Rect(200, 320, 500, 40)
 input_prenom = pygame.Rect(200, 380, 500, 40)
 button_valider_connect = pygame.Rect(200, 330, 220, 50)
 button_valider_create = pygame.Rect(200, 450, 220, 50)
+coin_compte = pygame.Rect(800,0,100+max(len("Pseudo ="+compte_connecte),len("Argent="+str(argent_compte))),100)
 
 # variables
 etat = "menu_principal"
@@ -66,7 +73,6 @@ message_connexion = ""
 nom = ""
 prenom = ""
 argent = ""
-argent_compte = 0
 running = True
 popup_ouvert = False
 
@@ -125,6 +131,12 @@ while running:
                         message_connexion = "Vous êtes connecté :D\nAppuyez sur Échap"
                         print("Vous êtes désormais connecté !")
                         compte_connecte = pseudo_connexion
+                        argent_stock_compte = curseur.execute("""
+                                                              SELECT Argent
+                                                              FROM Base_Données_Comptes
+                                                              WHERE Pseudo = ?""",
+                                                              compte_connecte)
+                        argent_compte = argent_stock_compte.fetchone()[0]
                     else:
                         message_connexion = "Pseudo ou mot de passe incorrect."
                         compte_connecte = ""
@@ -190,18 +202,22 @@ while running:
                         prenom += event.unicode
                     elif champ_actif == "argent":
                         if event.unicode.isdigit():
-                            argent += event.unicode
-                            argent_compte = int(argent)
-                            
-                            # Requête SQL pour update l’argent du compte connecté
-                            curseur.execute(
-                                """
-                                UPDATE Base_Données_Comptes
-                                SET Argent = Argent + ?
-                                WHERE Pseudo = ?
-                                """,
-                                (argent_compte,compte_connecte))
-                            base_donnee.commit()
+                            argent = ""
+                            if compte_connecte : 
+                                argent += event.unicode
+                                argent_compte = int(argent)
+                                print(argent_compte)   
+                                # Requête SQL pour update l’argent du compte connecté
+                                curseur.execute(
+                                    """
+                                    UPDATE Base_Données_Comptes
+                                    SET Argent = Argent + ?
+                                    WHERE Pseudo = ?
+                                    """,
+                                    (int(argent),compte_connecte))
+                                base_donnee.commit()
+                            else :
+                                argent = "Pas connecté."
 
     # ── affichage ─────────────────────────────────────────────────────────
     fenetre.blit(fond, (0, 0))
@@ -210,6 +226,7 @@ while running:
         pygame.draw.rect(fenetre, BLUE, button_menu)
         pygame.draw.rect(fenetre, DARK, button_connect)
         pygame.draw.rect(fenetre, DARK, button_create)
+        pygame.draw.rect(fenetre,BLUE, coin_compte)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_connect.x + 20, button_connect.y + 15))
         fenetre.blit(font.render("Créer un compte", True, WHITE), (button_create.x + 5, button_create.y + 15))
         fenetre.blit(font.render("Accéder aux jeux", True, WHITE), (button_menu.x + 50, button_menu.y + 25))
@@ -224,7 +241,8 @@ while running:
         pygame.draw.rect(fenetre, RED, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
         if message_connexion != "":
-            texte_message = font.render(message_connexion, True, GREY)
+            texte_message = font.render(message_connexion, True, WHITE)
+
             fenetre.blit(texte_message, (button_valider_connect.x, button_valider_connect.y + 70))
 
     elif etat == "creation":
