@@ -190,14 +190,14 @@ def roulette(fenetre):
             if isinstance(pari, int) and pari == number:
                 gain = montant * 36
                 argent += gain
-                resultats.append(f"Gagné ! Numéro {pari} +{gain}$")
+                resultats.append(f"Gagné ! Numéro {pari} à {gain}$")
             elif isinstance(pari, str) and pari == color:
                 gain = montant * 2
                 argent += gain
-                resultats.append(f"Gagné ! Couleur {color} +{gain}$")
+                resultats.append(f"Gagné ! Couleur {color} à {gain}$")
             else:
                 resultats.append(f"Perdu sur {pari}.")
-        resultats.append(f"Solde : {startmoney}$ → {argent}$")
+        resultats.append(f"Solde : {startmoney}$ à {argent}$")
 
         # ── écran résultat ────────────────────────────────────────────────
         rejouer = ""
@@ -219,12 +219,12 @@ def roulette(fenetre):
                         if etape_fin == "fini":
                             return
                         r = rejouer.strip().lower()
-                        if r == "yes":
+                        if r == "oui":
                             affichage_fin = False
-                        elif r == "no":
+                        elif r == "non":
                             return
                         else:
-                            erreur = "Tapez yes ou no."
+                            erreur = "Tapez yes ou non."
                     else:
                         rejouer += event.unicode
 
@@ -243,7 +243,7 @@ def roulette(fenetre):
             if etape_fin == "fini":
                 fenetre.blit(font_small.render("Plus d'argent. Entrée pour quitter.", True, RED), (40, H - 80))
             else:
-                fenetre.blit(font_small.render("Rejouer ? (yes/no)", True, GREY), (40, H - 110))
+                fenetre.blit(font_small.render("Rejouer ? (oui/non)", True, GREY), (40, H - 110))
                 pygame.draw.rect(fenetre, WHITE, (40, H - 75, 200, 38), 2)
                 fenetre.blit(font_small.render(rejouer, True, WHITE), (50, H - 68))
                 if erreur:
