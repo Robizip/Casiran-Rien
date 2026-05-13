@@ -191,7 +191,7 @@ def bataillepolitique(fenetre):
         fenetre.fill(DARK)
 
         for i, msg in enumerate(messages[scroll_offset:scroll_offset + visible]):
-            couleur = GREEN if "vainqueur" in msg else RED if "meurt" in msg or "plèbe" or "parié sur" in msg or "peu" in msg or "impots" in msg or "eux" in msg or "dans" in msg or "JFK" in msg or in msg or "sa" in msg or "" "douche" in msg or "NSI" in msg or "King" in msg or "" "plèbe" in msg or "Reddit" in msg or "finit" in msg or "se" in msg or "bouzelouf" in msg or "pleure" in msg or "quitte" in msg or "s'est" in msg or "compresser" in msg or "cancel" in msg or "Epstein" in msg or "discord" in msg or "ABR" in msg or "paisiblement" in msg or "table" in msg or "4chan" in msg or "lylian" in msg or "couronnes" in msg or "splashbot" in msg or "allégence" in msg or "glissant" in msg or "Saadi" in msg else WHITE
+            couleur = GREEN if "vainqueur" in msg or "parié" in msg else RED if "meurt" in msg or "plèbe" in msg or "peu" in msg or "impots" in msg or "eux" in msg or "dans" in msg or "JFK" in msg or "sa" in msg or "douche" in msg or "NSI" in msg or "King" in msg or "Reddit" in msg or "finit" in msg or "se" in msg or "bouzelouf" in msg or "pleure" in msg or "quitte" in msg or "s'est" in msg or "compresser" in msg or "cancel" in msg or "Epstein" in msg or "discord" in msg or "ABR" in msg or "paisiblement" in msg or "table" in msg or "4chan" in msg or "lylian" in msg or "couronnes" in msg or "splashbot" in msg or "allégence" in msg or "glissant" in msg or "Saadi" in msg else WHITE
             surf = font_small.render(msg, True, couleur)
             fenetre.blit(surf, (40, 20 + i * ligne_h))
 
