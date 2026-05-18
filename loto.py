@@ -14,9 +14,6 @@ HIGHLIGHT = (200, 160, 0)
  
  
 def loto(fenetre):
-    if argent < 2:
-        text = font.render("Vous êtes trop pauvre, allez mendier hors d'ici !", True, RED)
-        fenetre.blit(text, (200, 250))
     font = pygame.font.Font(None, 30)
     font_small = pygame.font.Font(None, 24)
     font_big = pygame.font.Font(None, 42)
