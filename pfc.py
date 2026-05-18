@@ -2,15 +2,15 @@ import pygame
 import random
 import sqlite3
 
-base_donnee = sqlite3.connect("BaseDonnéeCasino.db")
-curseur = base_donnee.cursor()
-compte_connecte = ""
-argent_stock_compte = curseur.execute("""
-                                        SELECT Argent
-                                        FROM Base_Données_Comptes
-                                        WHERE Pseudo = ?""",
-                                        (compte_connecte,))
-argent_compte = argent_stock_compte.fetchone()[0]
+# base_donnee = sqlite3.connect("BaseDonnéeCasino.db")
+# curseur = base_donnee.cursor()
+# compte_connecte = ""
+# argent_stock_compte = curseur.execute("""
+#                                         SELECT Argent
+#                                         FROM Base_Données_Comptes
+#                                         WHERE Pseudo = ?""",
+#                                         (compte_connecte,))
+# argent_compte = argent_stock_compte.fetchone()[0]
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

@@ -78,6 +78,7 @@ running = True
 popup_ouvert = False
 curseur_visible = True
 timer_curseur = 0
+reajustement = 0
 
 while running:
     for event in pygame.event.get():
@@ -150,7 +151,7 @@ while running:
                         "SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?",
                         (pseudo_connexion, hashlib.sha256(mot_de_passe_connexion.encode()).hexdigest())
                     )
-                    if verif.fetchone():
+                    if verif.fetchone(): # Si la connexion réussit
                         message_connexion = "Vous êtes connecté :D Appuyez sur Échap"
                         print("Vous êtes désormais connecté !")
                         compte_connecte = pseudo_connexion
@@ -176,7 +177,7 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
-                    try :
+                    try : # Bout de code gérant la crèation d’un compte.
                         curseur.execute(
                         """
                         INSERT INTO Base_Données_Comptes
@@ -186,9 +187,11 @@ while running:
                         (pseudo_creation, hashlib.sha256(mot_de_passe_creation.encode()).hexdigest(), nom, prenom, 0))
                     except :
                         message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
+                        reajustement = 0
                     else :
                         base_donnee.commit()
-                        message_creation = "Votre compte a été créé. Appuiez sur Échap et connectez-vous."
+                        message_creation = "Votre compte a été créé. Appuyez sur Échap et connectez-vous."
+                        reajustement = -100
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -197,7 +200,7 @@ while running:
                     champ_actif = None
                 else:
                     etat = "menu_principal"
-            elif champ_actif:
+            elif champ_actif: # Partie du code pour gérer les zones de textes dans Pygames.
                 if event.key == pygame.K_BACKSPACE:
                     if champ_actif == "pseudo_creation":
                         pseudo_creation = pseudo_creation[:-1]
@@ -305,7 +308,7 @@ while running:
 
         if message_creation != "" :
             texte_message_creation = font.render(message_creation, True, WHITE)
-            fenetre.blit(texte_message_creation,(button_valider_create.x,button_valider_create.y + 70))
+            fenetre.blit(texte_message_creation,(button_valider_create.x + reajustement,button_valider_create.y + 70))
 
 
     elif etat == "menu_jeux":
