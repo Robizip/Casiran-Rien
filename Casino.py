@@ -67,6 +67,7 @@ etat = "menu_principal"
 champ_actif = None
 pseudo_creation = ""
 mot_de_passe_creation = ""
+message_creation = ""
 pseudo_connexion = ""
 mot_de_passe_connexion = ""
 message_connexion = ""
@@ -153,15 +154,28 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
-                    curseur.execute(
+                    try :
+                        curseur.execute(
                         """
                         INSERT INTO Base_Données_Comptes
                         (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
                         VALUES (NULL, ?, ?, ?, ?, ?)
                         """,
                         (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)
-                    )
-                    base_donnee.commit()
+                        )
+                    except :
+                        message_creation = "Erreur. Réessayez."
+                    else :
+                        curseur.execute(
+                        """
+                        INSERT INTO Base_Données_Comptes
+                        (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
+                        VALUES (NULL, ?, ?, ?, ?, ?)
+                        """,
+                        (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)
+                        )
+                        base_donnee.commit()
+                        message_creation = "Votre compte a été créé. Appuiez sur Échap et connectez-vous."
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -250,9 +264,8 @@ while running:
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
         
         if message_connexion != "":
-            texte_message = font.render(message_connexion, True, WHITE)
-            
-            fenetre.blit(texte_message, (button_valider_connect.x, button_valider_connect.y + 70))
+            texte_message_connexion = font.render(message_connexion, True, WHITE)
+            fenetre.blit(texte_message_connexion, (button_valider_connect.x, button_valider_connect.y + 70))
 
     elif etat == "creation":
         pygame.draw.rect(fenetre, WHITE, input_nom)
@@ -273,6 +286,11 @@ while running:
         pygame.draw.rect(fenetre,BLUE, coin_compte)
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
+
+        if message_creation != "" :
+            texte_message_creation = font.render(message_creation, True, WHITE)
+            fenetre.blit(texte_message_creation,(button_valider_create.x,button_valider_create.y + 70))
+
 
     elif etat == "menu_jeux":
         pygame.draw.rect(fenetre, BLUE, button_loto)
