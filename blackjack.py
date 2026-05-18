@@ -154,7 +154,7 @@ def blackjack(fenetre):
             fenetre.blit(font_small.render("Rester", True, WHITE), (button_reste.x + 45, button_reste.y + 15))
 
         hint2 = font_small.render("Échap pour revenir", True, GREY)
-        fenetre.blit(hint2, (40, fenetre.get_height() - 40))
+        fenetre.blit(hint2, (40, fenetre.get_height() - 45))
 
         pygame.display.flip()
         clock.tick(60)

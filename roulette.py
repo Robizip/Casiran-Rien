@@ -59,7 +59,7 @@ def roulette(fenetre):
         fenetre.blit(font_small.render(texte_saisi, True, WHITE), (W // 2 - 140, 280))
         if erreur:
             fenetre.blit(font_small.render(erreur, True, RED), (W // 2 - 150, 330))
-        fenetre.blit(font_small.render("Échap pour revenir", True, GREY), (40, H - 40))
+        fenetre.blit(font_small.render("Échap pour revenir", True, GREY), (40, H - 45))
         pygame.display.flip()
         clock.tick(60)
 

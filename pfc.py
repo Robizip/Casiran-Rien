@@ -69,7 +69,7 @@ def chifoumi(ecran):
             ecran.blit(e, (ecran.get_width() // 2 - e.get_width() // 2, 360))
 
         hint = font_small.render("Échap pour revenir", True, GREY)
-        ecran.blit(hint, (40, ecran.get_height() - 40))
+        ecran.blit(hint, (40, ecran.get_height() - 45))
 
         pygame.display.flip()
         clock.tick(60)

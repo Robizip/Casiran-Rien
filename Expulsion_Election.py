@@ -118,7 +118,7 @@ def bataillepolitique(fenetre):
             fenetre.blit(err_surf, (200, 415))
 
         echap = font_small.render("Échap pour revenir au menu", True, GREY)
-        fenetre.blit(echap, (80, fenetre.get_height() - 40))
+        fenetre.blit(echap, (40, fenetre.get_height() - 45))
 
         pygame.display.flip()
         clock.tick(60)

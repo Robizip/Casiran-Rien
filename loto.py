@@ -159,7 +159,7 @@ def loto(fenetre):
             fenetre.blit(r2, (50, 775))
  
         hint = font_small.render("Espace pour lancer  |  Échap pour revenir", True, GREY)
-        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 25))
+        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 45))
  
         pygame.display.flip()
         clock.tick(60)
