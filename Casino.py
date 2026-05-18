@@ -150,7 +150,7 @@ while running:
                         "SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?",
                         (pseudo_connexion, hashlib.sha256(mot_de_passe_connexion.encode()).hexdigest())
                     )
-                    if verif.fetchone():
+                    if verif.fetchone(): # Si la connexion réussit
                         message_connexion = "Vous êtes connecté :D Appuyez sur Échap"
                         print("Vous êtes désormais connecté !")
                         compte_connecte = pseudo_connexion
@@ -176,7 +176,7 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
-                    try :
+                    try : # Bout de code gérant la crèation d’un compte.
                         curseur.execute(
                         """
                         INSERT INTO Base_Données_Comptes
@@ -188,7 +188,7 @@ while running:
                         message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
                     else :
                         base_donnee.commit()
-                        message_creation = "Votre compte a été créé. Appuiez sur Échap et connectez-vous."
+                        message_creation = "Votre compte a été créé. \r\n Appuiez sur Échap et connectez-vous."
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -197,7 +197,7 @@ while running:
                     champ_actif = None
                 else:
                     etat = "menu_principal"
-            elif champ_actif:
+            elif champ_actif: # Partie du code pour gérer les zones de textes dans Pygames.
                 if event.key == pygame.K_BACKSPACE:
                     if champ_actif == "pseudo_creation":
                         pseudo_creation = pseudo_creation[:-1]
