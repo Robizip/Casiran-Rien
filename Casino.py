@@ -21,6 +21,7 @@ DARK = (30, 30, 30)
 RED = (200, 50, 50)
 GREEN = (50, 200, 50)
 GREY = (180, 180, 180)
+GREY2 = (120, 120, 120)
 
 # fenêtre
 fenetre = pygame.display.set_mode((900, 900))
@@ -54,7 +55,7 @@ button_de = pygame.Rect(300, 800, 300, 80)
 button_argent = pygame.Rect(60, 130, 200, 80)
 button_valider_argent = pygame.Rect(350, 330, 200, 45)
 input_argent_popup = pygame.Rect(350, 270, 200, 40)
-input_pseudo = pygame.Rect(200, 200, 500, 40)
+input_pseudo = pygame.Rect(200, 180, 500, 40)
 input_mdp = pygame.Rect(200, 260, 500, 40)
 input_nom = pygame.Rect(200, 320, 500, 40)
 input_prenom = pygame.Rect(200, 380, 500, 40)
@@ -246,19 +247,19 @@ while running:
         fenetre.blit(font.render("Accéder aux jeux", True, WHITE), (button_menu.x + 50, button_menu.y + 25))
 
         # Code du coin pour afficher le nom du compte et l’argent.
-        pygame.draw.rect(fenetre,BLUE, coin_compte)
+        pygame.draw.rect(fenetre,GREY2, coin_compte)
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
 
     elif etat == "connexion":
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
         pygame.draw.rect(fenetre, WHITE, input_mdp)
-        fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
+        fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 150))
         fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
         texte = pseudo_connexion
         if champ_actif == "pseudo_connexion" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, BLUE), (210, 205))
+        fenetre.blit(font.render(texte, True, BLUE), (210, 185))
         texte = "*" * len(mot_de_passe_connexion)
         if champ_actif == "mdp_connexion" and curseur_visible:
             texte += "|"
@@ -266,7 +267,7 @@ while running:
         pygame.draw.rect(fenetre, RED, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
 
-        pygame.draw.rect(fenetre,BLUE, coin_compte)
+        pygame.draw.rect(fenetre,GREY2, coin_compte)
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
         
@@ -302,7 +303,7 @@ while running:
         pygame.draw.rect(fenetre, DARK, button_valider_create)
         fenetre.blit(font.render("Créer", True, WHITE), (button_valider_create.x + 70, button_valider_create.y + 12))
 
-        pygame.draw.rect(fenetre,BLUE, coin_compte)
+        pygame.draw.rect(fenetre,GREY2, coin_compte)
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
 
@@ -329,7 +330,7 @@ while running:
         fenetre.blit(font.render("Simulateur de dé", True, WHITE), (button_de.x + 35, button_de.y + 25))
         fenetre.blit(font.render("Argent", True, WHITE), (button_argent.x + 40, button_argent.y + 25))
 
-        pygame.draw.rect(fenetre,BLUE, coin_compte)
+        pygame.draw.rect(fenetre,GREY2, coin_compte)
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
 
