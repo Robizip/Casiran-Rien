@@ -1,6 +1,8 @@
 import pygame
 import random
- 
+
+
+
 WHITE = (255, 255, 255)
 GREY = (100, 100, 120)
 DARK = (30, 30, 30)
@@ -12,6 +14,9 @@ HIGHLIGHT = (200, 160, 0)
  
  
 def loto(fenetre):
+    if argent < 2:
+        text = font.render("Vous êtes trop pauvre, allez mendier hors d'ici !", True, RED)
+        fenetre.blit(text, (200, 250))
     font = pygame.font.Font(None, 30)
     font_small = pygame.font.Font(None, 24)
     font_big = pygame.font.Font(None, 42)
@@ -152,7 +157,7 @@ def loto(fenetre):
             gagnants, comp, bons, bon_comp, msg = resultat
             r1 = font_small.render(f"Tirage : {sorted(gagnants)}  +  complémentaire : {comp}", True, WHITE)
             fenetre.blit(r1, (50, 750))
-            couleur_msg = GREEN if "Rang" in msg or "JACKPOT" in msg else YELLOW if "2 bons" in msg else RED
+            couleur_msg = GREEN if "Rang" in msg or "JACKPOT, vous gagnez 20 000 000" in msg else YELLOW if "2 bons" in msg else RED
             r2 = font_small.render(msg, True, couleur_msg)
             fenetre.blit(r2, (50, 775))
  
