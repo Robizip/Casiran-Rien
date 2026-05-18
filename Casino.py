@@ -181,19 +181,12 @@ while running:
                         """
                         INSERT INTO Base_Données_Comptes
                         (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
-                        VALUES (NULL, ?, "", "", "", 0)
-                        """,
-                        (pseudo_creation,))
-                    except :
-                        message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
-                    else :
-                        curseur.execute(
-                        """
-                        INSERT INTO Base_Données_Comptes
-                        (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
                         VALUES (NULL, ?, ?, ?, ?, ?)
                         """,
                         (pseudo_creation, hashlib.sha256(mot_de_passe_creation.encode()).hexdigest(), nom, prenom, 0))
+                    except :
+                        message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
+                    else :
                         base_donnee.commit()
                         message_creation = "Votre compte a été créé. Appuiez sur Échap et connectez-vous."
 
