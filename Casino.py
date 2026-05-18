@@ -96,9 +96,29 @@ while running:
                     if input_argent_popup.collidepoint(event.pos):
                         champ_actif = "argent"
                     elif button_valider_argent.collidepoint(event.pos):
-                        pass  # à brancher sur la base de données
-                        popup_ouvert = False
-                        champ_actif = None
+                        if compte_connecte and argent.isdigit():
+                            montant = int(argent)
+                            curseur.execute(
+                                """
+                                UPDATE Base_Données_Comptes
+                                SET Argent = Argent + ?
+                                WHERE Pseudo = ?
+                                """,
+                               (montant, compte_connecte)
+                        )
+                            base_donnee.commit()
+                            argent_stock_compte = curseur.execute(
+                                """
+                                SELECT Argent
+                                FROM Base_Données_Comptes
+                                WHERE Pseudo = ?
+                                """,
+                                (compte_connecte,)
+                        )
+                        argent_compte = argent_stock_compte.fetchone()[0]
+                    argent = ""
+                    popup_ouvert = False
+                    champ_actif = None
                 else:
                     if button_argent.collidepoint(event.pos):
                         popup_ouvert = True
@@ -216,22 +236,7 @@ while running:
                         prenom += event.unicode
                     elif champ_actif == "argent":
                         if event.unicode.isdigit():
-                            argent = ""
-                            if compte_connecte : 
-                                argent += event.unicode
-                                argent_compte = int(argent)
-                                print(argent_compte)   
-                                # Requête SQL pour update l’argent du compte connecté
-                                curseur.execute(
-                                    """
-                                    UPDATE Base_Données_Comptes
-                                    SET Argent = Argent + ?
-                                    WHERE Pseudo = ?
-                                    """,
-                                    (int(argent),compte_connecte))
-                                base_donnee.commit()
-                            else :
-                                argent = "Pas connecté."
+                            argent += event.unicode
 
     # ── affichage ─────────────────────────────────────────────────────────
     fenetre.blit(fond, (0, 0))
