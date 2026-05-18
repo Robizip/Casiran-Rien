@@ -78,6 +78,7 @@ running = True
 popup_ouvert = False
 curseur_visible = True
 timer_curseur = 0
+reajustement = 0
 
 while running:
     for event in pygame.event.get():
@@ -186,9 +187,11 @@ while running:
                         (pseudo_creation, hashlib.sha256(mot_de_passe_creation.encode()).hexdigest(), nom, prenom, 0))
                     except :
                         message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
+                        reajustement = 0
                     else :
                         base_donnee.commit()
-                        message_creation = "Votre compte a été créé. \r\n Appuiez sur Échap et connectez-vous."
+                        message_creation = "Votre compte a été créé. Appuyez sur Échap et connectez-vous."
+                        reajustement = -100
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -305,7 +308,7 @@ while running:
 
         if message_creation != "" :
             texte_message_creation = font.render(message_creation, True, WHITE)
-            fenetre.blit(texte_message_creation,(button_valider_create.x,button_valider_create.y + 70))
+            fenetre.blit(texte_message_creation,(button_valider_create.x + reajustement,button_valider_create.y + 70))
 
 
     elif etat == "menu_jeux":
