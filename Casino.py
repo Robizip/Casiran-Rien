@@ -1,6 +1,6 @@
 import pygame
-import random #type: ignore
 import sqlite3
+import hashlib
 from loto import loto as loto_run
 from pfc import chifoumi as chifoumi_run
 from blackjack import blackjack as blackjack_run
@@ -146,7 +146,7 @@ while running:
                 elif button_valider_connect.collidepoint(event.pos):
                     verif = curseur.execute(
                         "SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?",
-                        (pseudo_connexion, mot_de_passe_connexion)
+                        (pseudo_connexion, hashlib.sha256(mot_de_passe_connexion.encode()).hexdigest())
                     )
                     if verif.fetchone():
                         message_connexion = "Vous êtes connecté :D Appuyez sur Échap"
@@ -179,12 +179,11 @@ while running:
                         """
                         INSERT INTO Base_Données_Comptes
                         (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
-                        VALUES (NULL, ?, ?, ?, ?, ?)
+                        VALUES (NULL, ?, "", "", "", 0)
                         """,
-                        (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)
-                        )
+                        (pseudo_creation,))
                     except :
-                        message_creation = "Erreur. Réessayez."
+                        message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
                     else :
                         curseur.execute(
                         """
@@ -192,8 +191,7 @@ while running:
                         (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
                         VALUES (NULL, ?, ?, ?, ?, ?)
                         """,
-                        (pseudo_creation, mot_de_passe_creation, nom, prenom, 0)
-                        )
+                        (pseudo_creation, hashlib.sha256(mot_de_passe_creation.encode()).hexdigest(), nom, prenom, 0))
                         base_donnee.commit()
                         message_creation = "Votre compte a été créé. Appuiez sur Échap et connectez-vous."
 
