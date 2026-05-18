@@ -13,6 +13,54 @@ def bataillepolitique(fenetre):
     font = pygame.font.Font(None, 32)
     font_small = pygame.font.Font(None, 26)
     clock = pygame.time.Clock()
+     # ── saisie de la mise ─────────────────────────────────────────────────
+    texte_saisi = ""
+    erreur = ""
+    argent2 = None
+
+    while argent2 is None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
+                elif event.key == pygame.K_BACKSPACE:
+                    texte_saisi = texte_saisi[:-1]
+                elif event.key == pygame.K_RETURN:
+                    try:
+                        val = int(texte_saisi)
+                        if val <= 0:
+                            erreur = "Entrez un nombre positif."
+                        else:
+                            argent2 = val
+                    except ValueError:
+                        erreur = "Entrez un nombre valide."
+                elif event.unicode.isdigit():
+                    texte_saisi += event.unicode
+
+        fenetre.fill(DARK)
+        titre = font.render("Bataille politique", True, WHITE)
+        fenetre.blit(titre, (fenetre.get_width() // 2 - titre.get_width() // 2, 100))
+
+        label = font_small.render("Combien misez-vous ?", True, GREY)
+        fenetre.blit(label, (fenetre.get_width() // 2 - label.get_width() // 2, 250))
+
+        pygame.draw.rect(fenetre, WHITE, (300, 300, 300, 45), 2)
+        surf = font_small.render(texte_saisi, True, WHITE)
+        fenetre.blit(surf, (310, 310))
+
+        if erreur:
+            e = font_small.render(erreur, True, RED)
+            fenetre.blit(e, (fenetre.get_width() // 2 - e.get_width() // 2, 360))
+
+        hint = font_small.render("Échap pour revenir", True, GREY)
+        fenetre.blit(hint, (40, fenetre.get_height() - 40))
+
+        pygame.display.flip()
+        clock.tick(60)
+
 
     listecombattans = [
         "Zemmour", "Macron", "Melenchon", "Bardella",
@@ -163,7 +211,7 @@ def bataillepolitique(fenetre):
     else:
         messages.append(f"Le grand vainqueur est {gagnant} !")
         if gagnant == choix:
-            messages.append("Vous avez parié sur le bon cheval !")
+            messages.append(f"Vous avez parié sur le bon cheval ! Vous gagnez {argent2 * 8}")
         else:
             messages.append("Dommage, vous perdez !")
 
@@ -196,7 +244,7 @@ def bataillepolitique(fenetre):
             fenetre.blit(surf, (40, 20 + i * ligne_h))
 
         hint = font_small.render("Flèches ou Molette pour faire défiler  |  Échap pour revenir", True, GREY)
-        fenetre.blit(hint, (40, fenetre.get_height() - 35))
+        fenetre.blit(hint, (40, fenetre.get_height() - 45))
 
         pygame.display.flip()
         clock.tick(60)
