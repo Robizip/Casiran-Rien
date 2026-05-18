@@ -50,19 +50,19 @@ def machine_sous(fenetre):
                     unique = list(set(tirage))
                     if len(unique) == 1:
                         if unique[0] == "7":
-                            message = "🎰 JACKPOT !!! 🎰"
-                            couleur_msg = YELLOW
+                            message = " JACKPOT !!! "
+                            couleur_msg = GREEN
                         else:
-                            message = f"Bravo, 3 {unique[0]} identiques !"
+                            message = f"Bravo, 3 ({unique[0]})  identiques ! vous gagnez 500€"
                             couleur_msg = GREEN
                     elif len(unique) == 2:
-                        message = "Deux symboles identiques, pas mauvais !"
+                        message = "Deux symboles identiques, pas mauvais ! Vous gagnez 25€"
                         couleur_msg = WHITE
                     else:
                         message = "Perdu, réessaie !"
                         couleur_msg = RED
         fenetre.fill(DARK)
-        titre = font.render("🎰 Bandit Manchot", True, WHITE)
+        titre = font.render("Bandit Manchot", True, WHITE)
         fenetre.blit(titre, (W // 2 - titre.get_width() // 2, 60))
         # rouleaux
         pygame.draw.rect(fenetre, (50, 50, 70), (W // 2 - 220, 180, 440, 130), border_radius=12)
@@ -81,6 +81,6 @@ def machine_sous(fenetre):
         pygame.draw.rect(fenetre, (80, 80, 180), button_jouer, border_radius=8)
         fenetre.blit(font.render("JOUER", True, WHITE), (button_jouer.x + 48, button_jouer.y + 12))
         hint = font_small.render("Clic ou Espace pour jouer  |  Échap pour revenir", True, GREY)
-        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 40))
+        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 45))
         pygame.display.flip()
         clock.tick(60)

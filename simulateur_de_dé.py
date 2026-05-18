@@ -109,8 +109,8 @@ def sim_de(fenetre):
             fenetre.fill(DARK)
             for i, (msg, col) in enumerate(lignes[scroll:scroll + visible]):
                 fenetre.blit(font_small.render(msg, True, col), (60, 40 + i * 32))
-            hint = font_small.render("Entrée / Espace pour continuer  |  ↑↓ défiler  |  Échap quitter", True, GREY)
-            fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 40))
+            hint = font_small.render("Entrée / Espace pour continuer    molette pour défiler    Échap quitter", True, GREY)
+            fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 50))
             pygame.display.flip()
             clock.tick(60)
     # ── écran de fin ──────────────────────────────────────────────────────
@@ -131,10 +131,10 @@ def sim_de(fenetre):
                     attente_fin = False
         fenetre.fill(DARK)
         surf = font.render(msg_fin, True, col_fin)
-        fenetre.blit(surf, (W // 2 - surf.get_width() // 2, H // 2 - 40))
-        score_fin = font_small.render(f"Score final — Toi : {manche_joueurs}  |  Ordi : {manche_ordi}", True, YELLOW)
+        fenetre.blit(surf, (W // 2 - surf.get_width() // 2, H // 2 - 45))
+        score_fin = font_small.render(f"Score final : Toi : {manche_joueurs}    Ordi : {manche_ordi}", True, YELLOW)
         fenetre.blit(score_fin, (W // 2 - score_fin.get_width() // 2, H // 2 + 20))
         hint = font_small.render("Entrée ou Échap pour revenir", True, GREY)
-        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 40))
+        fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 45))
         pygame.display.flip()
         clock.tick(60)
