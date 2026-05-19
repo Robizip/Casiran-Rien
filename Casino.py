@@ -17,6 +17,7 @@ curseur = base_donnee.cursor()
 # couleurs
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
+BLUE2 = (0, 0, 215)
 DARK = (30, 30, 30)
 RED = (200, 50, 50)
 GREEN = (50, 200, 50)
@@ -55,9 +56,9 @@ button_de = pygame.Rect(300, 800, 300, 80)
 button_argent = pygame.Rect(60, 130, 200, 80)
 button_valider_argent = pygame.Rect(350, 330, 200, 45)
 input_argent_popup = pygame.Rect(350, 270, 200, 40)
-input_pseudo = pygame.Rect(200, 180, 500, 40)
-input_mdp = pygame.Rect(200, 260, 500, 40)
-input_nom = pygame.Rect(200, 320, 500, 40)
+input_pseudo = pygame.Rect(200, 140, 500, 40)
+input_mdp = pygame.Rect(200, 220, 500, 40)
+input_nom = pygame.Rect(200, 300, 500, 40)
 input_prenom = pygame.Rect(200, 380, 500, 40)
 button_valider_connect = pygame.Rect(200, 330, 220, 50)
 button_valider_create = pygame.Rect(200, 450, 220, 50)
@@ -239,12 +240,12 @@ while running:
     fenetre.blit(fond, (0, 0))
 
     if etat == "menu_principal":
-        pygame.draw.rect(fenetre, BLUE, button_menu)
+        pygame.draw.rect(fenetre, WHITE, button_menu)
         pygame.draw.rect(fenetre, DARK, button_connect)
         pygame.draw.rect(fenetre, DARK, button_create)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_connect.x + 20, button_connect.y + 15))
         fenetre.blit(font.render("Créer un compte", True, WHITE), (button_create.x + 5, button_create.y + 15))
-        fenetre.blit(font.render("Accéder aux jeux", True, WHITE), (button_menu.x + 50, button_menu.y + 25))
+        fenetre.blit(font.render("Accéder aux jeux", True, DARK), (button_menu.x + 50, button_menu.y + 25))
 
         # Code du coin pour afficher le nom du compte et l’argent.
         pygame.draw.rect(fenetre,GREY2, coin_compte)
@@ -254,17 +255,17 @@ while running:
     elif etat == "connexion":
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
         pygame.draw.rect(fenetre, WHITE, input_mdp)
-        fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 150))
-        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
+        fenetre.blit(font.render("Pseudo :", True, BLUE2), (200, 115))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE2), (200, 190))
         texte = pseudo_connexion
         if champ_actif == "pseudo_connexion" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, BLUE), (210, 185))
+        fenetre.blit(font.render(texte, True, DARK), (210, 145))
         texte = "*" * len(mot_de_passe_connexion)
         if champ_actif == "mdp_connexion" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, BLUE), (210, 265))
-        pygame.draw.rect(fenetre, RED, button_valider_connect)
+        fenetre.blit(font.render(texte, True, DARK), (210, 225))
+        pygame.draw.rect(fenetre, DARK, button_valider_connect)
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_valider_connect.x + 20, button_valider_connect.y + 12))
 
         pygame.draw.rect(fenetre,GREY2, coin_compte)
@@ -280,26 +281,26 @@ while running:
         pygame.draw.rect(fenetre, WHITE, input_prenom)
         pygame.draw.rect(fenetre, WHITE, input_pseudo)
         pygame.draw.rect(fenetre, WHITE, input_mdp)
-        fenetre.blit(font.render("Nom :", True, BLUE), (200, 290))
-        fenetre.blit(font.render("Prénom :", True, BLUE), (200, 350))
-        fenetre.blit(font.render("Pseudo :", True, BLUE), (200, 170))
-        fenetre.blit(font.render("Mot de passe :", True, BLUE), (200, 230))
+        fenetre.blit(font.render("Nom :", True, BLUE2), (200, 270))
+        fenetre.blit(font.render("Prénom :", True, BLUE2), (200, 350))
+        fenetre.blit(font.render("Pseudo :", True, BLUE2), (200, 115))
+        fenetre.blit(font.render("Mot de passe :", True, BLUE2), (200, 190))
         texte = nom
         if champ_actif == "nom" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, BLUE), (210, 325))
+        fenetre.blit(font.render(texte, True, DARK), (210, 305))
         texte = prenom
-        if champ_actif == "prénom" and curseur_visible:
+        if champ_actif == "prenom" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, BLUE), (210, 385))
+        fenetre.blit(font.render(texte, True, DARK), (210, 385))
         texte = pseudo_creation
         if champ_actif == "pseudo_creation" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, BLUE), (210, 205))
+        fenetre.blit(font.render(texte, True, DARK), (210, 145))
         texte = "*" * len(mot_de_passe_creation)
         if champ_actif == "mdp_creation" and curseur_visible:
             texte += "|"
-        fenetre.blit(font.render(texte, True, GREY), (210, 265))
+        fenetre.blit(font.render(texte, True, DARK), (210, 225))
         pygame.draw.rect(fenetre, DARK, button_valider_create)
         fenetre.blit(font.render("Créer", True, WHITE), (button_valider_create.x + 70, button_valider_create.y + 12))
 
