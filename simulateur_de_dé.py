@@ -15,7 +15,8 @@ def sim_de(fenetre):
     font_small = pygame.font.Font(None, 28)
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
-
+    
+    # Saisie de la mise
     texte_saisi = ""
     erreur = ""
     argent2 = None
@@ -62,9 +63,11 @@ def sim_de(fenetre):
 
         pygame.display.flip()
         clock.tick(60)
-
+    
+    # Score des manches (premier à 3)
     manche_joueurs = 0
     manche_ordi = 0
+    # Sous-fonction : saisie d'un entier positif avec affichage du score en cours
     def saisie_nombre(label):
         texte = ""
         erreur = ""
@@ -103,7 +106,7 @@ def sim_de(fenetre):
             fenetre.blit(font_small.render("Échap pour revenir", True, GREY), (40, H - 45))
             pygame.display.flip()
             clock.tick(60)
-    # ── boucle des manches ────────────────────────────────────────────────
+    # Boucle des manches
     while manche_joueurs < 3 and manche_ordi < 3:
         lancers = saisie_nombre("Combien de dés lancer ?")
         if lancers is None:
@@ -111,10 +114,10 @@ def sim_de(fenetre):
         face = saisie_nombre("Combien de faces par dé ?")
         if face is None:
             return
-        # tirage
+        # Tirage simultané
         liste_joueurs = []
         liste_ordi = []
-        lignes = []
+        lignes = [] # Liste pour l'affichage
         for i in range(lancers):
             de = random.randint(1, face)
             ordi = random.randint(1, face)
@@ -133,9 +136,9 @@ def sim_de(fenetre):
         else:
             lignes.append(("Égalité ! Pas de point.", GREY))
         lignes.append((f"Score — Vous : {manche_joueurs}  |  Ordi : {manche_ordi}", YELLOW))
-        # affichage résultat manche
+        # Affichage résultat manche
         scroll = 0
-        visible = (H - 120) // 32
+        visible = (H - 120) // 32 # Nombre de lignes affichable à l'écran
         attente = True
         while attente:
             for event in pygame.event.get():
@@ -160,7 +163,7 @@ def sim_de(fenetre):
             fenetre.blit(hint, (W // 2 - hint.get_width() / 2, H - 50))
             pygame.display.flip()
             clock.tick(60)
-    # ── écran de fin ──────────────────────────────────────────────────────
+    # Ecran de fin
     if manche_joueurs == 3:
         msg_fin = f"BRAVO ! Vous avez gagnez la partie ! Vous remportez {argent2 * 2}€"
         col_fin = GREEN
