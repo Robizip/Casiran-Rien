@@ -16,7 +16,7 @@ def machine_sous(fenetre):
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
     symboles = [":)", "Ø", ":(", "•", "€", "$", "#", "&", "<>", "7"]
-    tirage = None
+    tirage = None # Pas encore joué
     message = ""
     couleur_msg = WHITE
     button_jouer = pygame.Rect(W // 2 - 100, H - 150, 200, 55)
@@ -31,17 +31,17 @@ def machine_sous(fenetre):
                 elif event.key == pygame.K_SPACE:
                     tirage = [random.choice(symboles) for _ in range(3)]
                     unique = list(set(tirage))
-                    if len(unique) == 1:
+                    if len(unique) == 1: # Triple identique
                         if unique[0] == "7":
                             message = " JACKPOT !!! "
                             couleur_msg = YELLOW
                         else:
                             message = f"Bravo, 3 {unique[0]} identiques !"
                             couleur_msg = GREEN
-                    elif len(unique) == 2:
+                    elif len(unique) == 2: # Paire
                         message = "Deux symboles identiques, pas mauvais !"
                         couleur_msg = WHITE
-                    else:
+                    else: # Rien
                         message = "Perdu, réessaie !"
                         couleur_msg = RED
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -69,7 +69,7 @@ def machine_sous(fenetre):
         if tirage:
             for i, s in enumerate(tirage):
                 sym = font_big.render(s, True, WHITE)
-                fenetre.blit(sym, (W // 2 - 160 + i * 140, 195))
+                fenetre.blit(sym, (W // 2 - 160 + i * 140, 195)) # Séparation de 140 pixels entre les rouleaux
         else:
             points = font_big.render("? | ? | ?", True, GREY)
             fenetre.blit(points, (W // 2 - points.get_width() // 2, 195))

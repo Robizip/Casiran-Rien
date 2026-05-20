@@ -19,16 +19,17 @@ def loto(fenetre):
     font_big = pygame.font.Font(None, 42)
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
- 
+
+    # Grille des boutons 
     boutons = []
     for i in range(49):
         x = 50 + (i % 7) * 110
-        y = 60 + (i // 7) * 75
+        y = 60 + (i // 7) * 75 
         boutons.append((pygame.Rect(x, y, 80, 55), i + 1))
- 
-    numeros = []
+    
+    numeros = [] # Liste des numéros tirés
     complementaire = None
-    resultat = None
+    resultat = None # Résultat du Loto
  
     button_lancer = pygame.Rect(W // 2 - 100, 640, 200, 50)
     button_reset = pygame.Rect(W // 2 - 100, 700, 200, 40)
@@ -46,11 +47,11 @@ def loto(fenetre):
                     pool = list(range(1, 50))
                     gagnants = random.sample(pool, 5)
                     pool_comp = [n for n in pool if n not in gagnants]
-                    comp = random.choice(pool_comp)
-                    bons = set(numeros[:5]) & set(gagnants)
+                    comp = random.choice(pool_comp) # Numéro complémentaire
+                    bons = set(numeros[:5]) & set(gagnants) # 5 numéros principaux
                     bon_comp = numeros[5] == comp
                     nb = len(bons)
-                    if nb == 5 and bon_comp:
+                    if nb == 5 and bon_comp: # Tout juste
                         msg = "JACKPOT !!!"
                     elif nb == 5:
                         msg = "Rang 2 — 5 bons numéros !"
@@ -79,7 +80,8 @@ def loto(fenetre):
                         elif len(numeros) < 6:
                             numeros.append(num)
                             resultat = None
- 
+                
+                # Recoder une deuxième fois mais permet de  faire fonctionner le jeu
                 if button_lancer.collidepoint(event.pos) and len(numeros) == 6:
                     resultat = None
                     pool = list(range(1, 50))
@@ -118,7 +120,8 @@ def loto(fenetre):
  
         titre = font_big.render("Loto", True, WHITE)
         fenetre.blit(titre, (W // 2 - titre.get_width() // 2, 15))
- 
+
+        # Affichage de la grille avec couleurs selon l'état de chaque numéro 
         for rect, num in boutons:
             est_principal = num in numeros[:5]
             est_comp = len(numeros) == 6 and num == numeros[5]
@@ -130,7 +133,7 @@ def loto(fenetre):
             fenetre.blit(txt, (rect.x + rect.w // 2 - txt.get_width() // 2,
                                rect.y + rect.h // 2 - txt.get_height() // 2))
  
-        # légende sélection
+        # Légende sélection
         nb_sel = len(numeros)
         if nb_sel < 5:
             hint_sel = f"Choisissez {5 - nb_sel} numéro(s) principal/aux"
@@ -140,7 +143,8 @@ def loto(fenetre):
             principaux = numeros[:5]
             hint_sel = f"Vos numéros : {principaux}  +  complémentaire : {numeros[5]}"
         fenetre.blit(font_small.render(hint_sel, True, YELLOW), (50, 625))
- 
+        
+        # Bouton "Lancer" grisé tant que la sélection n'est pas complète
         pret = len(numeros) == 6
         pygame.draw.rect(fenetre, BLUE if pret else (50, 50, 80), button_lancer, border_radius=8)
         fenetre.blit(font.render("Lancer le tirage", True, WHITE),

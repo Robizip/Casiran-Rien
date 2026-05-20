@@ -84,11 +84,12 @@ curseur_visible = True
 timer_curseur = 0
 reajustement = 0
 
+# Boucle principale 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        # si on clique avec la souris
         if event.type == pygame.MOUSEBUTTONDOWN:
             if etat == "menu_principal":
                 if button_menu.collidepoint(event.pos):
@@ -99,12 +100,13 @@ while running:
                     etat = "creation"
 
             elif etat == "menu_jeux":
-                if popup_ouvert:
+                if popup_ouvert: # Interactions dans le popup "ajouter de l'argent"
                     if input_argent_popup.collidepoint(event.pos):
                         champ_actif = "argent"
                     elif button_valider_argent.collidepoint(event.pos):
                         if compte_connecte and argent.isdigit():
                             montant = int(argent)
+                            # Argent en base
                             curseur.execute(
                                 """
                                 UPDATE Base_Données_Comptes
@@ -114,6 +116,7 @@ while running:
                                (montant, compte_connecte)
                         )
                             base_donnee.commit()
+                            # Mise à jour de l'affichage du solde
                             argent_stock_compte = curseur.execute(
                                 """
                                 SELECT Argent
@@ -127,6 +130,7 @@ while running:
                     popup_ouvert = False
                     champ_actif = None
                 else:
+                    # Boutons du menu des jeux
                     if button_argent.collidepoint(event.pos):
                         popup_ouvert = True
                         champ_actif = "argent"
@@ -151,6 +155,7 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_connexion"
                 elif button_valider_connect.collidepoint(event.pos):
+                    # Vérification du pseudo et mot de passe
                     verif = curseur.execute(
                         "SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?",
                         (pseudo_connexion, hashlib.sha256(mot_de_passe_connexion.encode()).hexdigest())
@@ -181,7 +186,7 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
-                    try : # Bout de code gérant la crèation d’un compte.
+                    try : # Bout de code gérant la création d’un compte.
                         curseur.execute(
                         """
                         INSERT INTO Base_Données_Comptes
@@ -189,14 +194,14 @@ while running:
                         VALUES (NULL, ?, ?, ?, ?, ?)
                         """,
                         (pseudo_creation, hashlib.sha256(mot_de_passe_creation.encode()).hexdigest(), nom, prenom, 0))
-                    except :
+                    except : # pseudo déjà utilisé
                         message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
                         reajustement = 0
                     else :
                         base_donnee.commit()
                         message_creation = "Votre compte a été créé. Appuyez sur Échap et connectez-vous."
                         reajustement = -100
-
+        # Si on utilise le clavier
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 if popup_ouvert:
@@ -221,6 +226,7 @@ while running:
                     elif champ_actif == "argent":
                         argent = argent[:-1]
                         argent_compte = int(argent) if argent else 0
+                # Insertion des caractères 
                 elif event.unicode:
                     if champ_actif == "pseudo_creation":
                         pseudo_creation += event.unicode
@@ -238,7 +244,7 @@ while running:
                         if event.unicode.isdigit():
                             argent += event.unicode
 
-    # ── affichage ─────────────────────────────────────────────────────────
+    # Affichage
     fenetre.blit(fond, (0, 0))
 
     if etat == "menu_principal":
@@ -248,7 +254,6 @@ while running:
         fenetre.blit(font.render("Se connecter", True, WHITE), (button_connect.x + 20, button_connect.y + 15))
         fenetre.blit(font.render("Créer un compte", True, WHITE), (button_create.x + 5, button_create.y + 15))
         fenetre.blit(font.render("Accéder aux jeux", True, DARK), (button_menu.x + 50, button_menu.y + 25))
-
         # Code du coin pour afficher le nom du compte et l’argent.
         pygame.draw.rect(fenetre,GREY2, coin_compte)
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
@@ -259,11 +264,14 @@ while running:
         pygame.draw.rect(fenetre, WHITE, input_mdp)
         fenetre.blit(font.render("Pseudo :", True, BLUE2), (200, 115))
         fenetre.blit(font.render("Mot de passe :", True, BLUE2), (200, 190))
+        # Affichage du champ pseudo avec curseur clignotant
         texte = pseudo_connexion
         if champ_actif == "pseudo_connexion" and curseur_visible:
             texte += "|"
+        # Mot de passe masqué
         fenetre.blit(font.render(texte, True, DARK), (210, 145))
         texte = "*" * len(mot_de_passe_connexion)
+
         if champ_actif == "mdp_connexion" and curseur_visible:
             texte += "|"
         fenetre.blit(font.render(texte, True, DARK), (210, 225))
@@ -299,6 +307,7 @@ while running:
         if champ_actif == "pseudo_creation" and curseur_visible:
             texte += "|"
         fenetre.blit(font.render(texte, True, DARK), (210, 145))
+        # Mot de passe masqué
         texte = "*" * len(mot_de_passe_creation)
         if champ_actif == "mdp_creation" and curseur_visible:
             texte += "|"
@@ -316,6 +325,7 @@ while running:
 
 
     elif etat == "menu_jeux":
+        # Boutons des jeux
         pygame.draw.rect(fenetre, BLUE3, button_loto)
         pygame.draw.rect(fenetre, BLUE3, button_blackjack)
         pygame.draw.rect(fenetre, BLUE3, button_chifoumi)
@@ -337,7 +347,8 @@ while running:
         fenetre.blit(font.render(f"Compte : {compte_connecte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 5))
         fenetre.blit(font.render(f"Argent : {argent_compte}",True,WHITE), (coin_compte.x + 10, coin_compte.y + 45))
 
-        if popup_ouvert:
+        if popup_ouvert: 
+            # Bouton pour rentrer de l'argent
             overlay = pygame.Surface((900, 900), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 180))
             fenetre.blit(overlay, (0, 0))
@@ -354,6 +365,7 @@ while running:
             pygame.draw.rect(fenetre, GREEN, button_valider_argent)
             fenetre.blit(font.render("Valider", True, WHITE), (button_valider_argent.x + 55, button_valider_argent.y + 10))
             fenetre.blit(font.render("Échap pour fermer", True, RED), (270, 390))
+    # Clignotement du curseur
     timer_curseur += 1
     if timer_curseur >= 30:
         curseur_visible = not curseur_visible

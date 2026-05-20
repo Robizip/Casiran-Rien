@@ -16,7 +16,7 @@ def blackjack(fenetre):
     font_small = pygame.font.Font(None, 32)
     clock = pygame.time.Clock()
 
-    # ── saisie de la mise ─────────────────────────────────────────────────
+    # Saisie de la mise
     texte_saisi = ""
     erreur = ""
     argent2 = None
@@ -64,7 +64,7 @@ def blackjack(fenetre):
         pygame.display.flip()
         clock.tick(60)
 
-    # ── jeu ───────────────────────────────────────────────────────────────
+    # Jeu en lui-même
     def nouveau_jeu():
         carte = [
             1,2,3,4,5,6,7,8,9,10,10,10,10,
@@ -78,9 +78,9 @@ def blackjack(fenetre):
         return carte, premiere
 
     carte, premiere = nouveau_jeu()
-    hit = premiere
-    x = 1
-    lost = 0
+    hit = premiere # Carte tiré
+    x = 1 # Nombre de cartes tirés
+    lost = 0 
     win = 0
     messages = [f"Mise : {argent2}€", f"Première carte : {premiere}  —  Total : {hit}"]
     partie_finie = False
@@ -104,7 +104,7 @@ def blackjack(fenetre):
                     x += 1
                     hit += cartejouer
                     messages.append(f"Vous tirez : {cartejouer}  —  Total : {hit}")
-                    if hit > 20:
+                    if hit > 20: # Si le total dépasse 20
                         partie_finie = True
 
                 elif button_reste.collidepoint(event.pos):

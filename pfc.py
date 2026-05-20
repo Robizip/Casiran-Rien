@@ -26,10 +26,10 @@ def chifoumi(ecran):
     font_small = pygame.font.Font(None, 32)
     clock = pygame.time.Clock()
 
-    # ── saisie de la mise ─────────────────────────────────────────────────
+    # Saisie de la mise
     texte_saisi = ""
     erreur = ""
-    argent2 = None
+    argent2 = None # none si tant que la mise n'est pas validée
 
     while argent2 is None:
         for event in pygame.event.get():
@@ -47,7 +47,7 @@ def chifoumi(ecran):
                         if val <= 0:
                             erreur = "Entrez un nombre positif."
                         else:
-                            argent2 = val
+                            argent2 = val # Quitte la boucle dès que la mise est validée
                     except ValueError:
                         erreur = "Entrez un nombre valide."
                 elif event.unicode.isdigit():
@@ -73,7 +73,8 @@ def chifoumi(ecran):
 
         pygame.display.flip()
         clock.tick(60)
-
+    
+    # initilisation du jeu
     pierre = "pierre"
     ciseaux = "ciseaux"
     feuille = "feuille"
@@ -81,6 +82,7 @@ def chifoumi(ecran):
     victoire_joueur = 0
     victoire_ordi = 0
     font = pygame.font.Font(None, 50)
+    # Bouton pour les 3 coups
     boutons = {
         "pierre": pygame.Rect(100, 700, 200, 80),
         "feuille": pygame.Rect(350, 700, 200, 80),
@@ -133,4 +135,4 @@ def chifoumi(ecran):
     ecran.blit(txt, (50, 400))
     pygame.display.flip()
 
-    pygame.time.wait(5000)
+    pygame.time.wait(5000) # Bloque tout pendant 5 secondes 

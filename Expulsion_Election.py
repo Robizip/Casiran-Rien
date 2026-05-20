@@ -13,7 +13,7 @@ def bataillepolitique(fenetre):
     font = pygame.font.Font(None, 32)
     font_small = pygame.font.Font(None, 26)
     clock = pygame.time.Clock()
-     # ── saisie de la mise ─────────────────────────────────────────────────
+     # Saisie de la mise
     texte_saisi = ""
     erreur = ""
     argent2 = None
@@ -31,11 +31,11 @@ def bataillepolitique(fenetre):
                 elif event.key == pygame.K_RETURN:
                     try:
                         val = int(texte_saisi)
-                        if val <= 0:
+                        if val <= 0: # On peut pas voler de l'argent lors de la mise 
                             erreur = "Entrez un nombre positif."
                         else:
                             argent2 = val
-                    except ValueError:
+                    except ValueError: # Un livre ça marche pas
                         erreur = "Entrez un nombre valide."
                 elif event.unicode.isdigit():
                     texte_saisi += event.unicode
@@ -67,7 +67,7 @@ def bataillepolitique(fenetre):
         "MarineLepen", "JeanMarieLepen", "NicolaSarkozy", "FrançoisHollande",
     ]
 
-    # ── Phase 1 : saisie du choix ──────────────────────────────────────────
+    # Phase 1 : Choix du personnage
     texte_saisi = ""
     erreur = ""
 
@@ -123,7 +123,7 @@ def bataillepolitique(fenetre):
         pygame.display.flip()
         clock.tick(60)
 
-    # ── Phase 2 : combat ───────────────────────────────────────────────────
+    # Phase 2 : Combat
     possiblemort = [
         "meurt en glissant sur une flaque",
         "meurt en prétant allégence à Irsraël",

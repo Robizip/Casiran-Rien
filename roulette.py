@@ -23,7 +23,7 @@ def roulette(fenetre):
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
 
-    # ── saisie argent de départ ───────────────────────────────────────────
+    # Saisie de départ
     texte_saisi = ""
     erreur = ""
     argent = None
@@ -63,19 +63,20 @@ def roulette(fenetre):
         pygame.display.flip()
         clock.tick(60)
 
-    # ── boucle principale ─────────────────────────────────────────────────
+    # Boucle principale
     while True:
-        startmoney = argent
-        bets = []
+        startmoney = argent # Solde de début
+        bets = [] # Liste aplatie [catégorie, montant, catégorie, montant, ...]
+        cat_temp = None
         cat_temp = None
         choix_cat = ""
         choix_montant = ""
         encore = ""
         erreur = ""
-        etape = "categorie"
+        etape = "categorie" # Etapes : "categorie" -> "montant" -> "encore"
         phase_mise = True
 
-        # ── phase de mise ─────────────────────────────────────────────────
+        # Phase de mise
         while phase_mise:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -92,7 +93,7 @@ def roulette(fenetre):
                         elif etape == "encore":
                             encore = encore[:-1]
                     elif event.key == pygame.K_RETURN:
-                        # ── catégorie ──
+                        # Catégorie
                         if etape == "categorie":
                             c = choix_cat.strip().lower()
                             if c in ("rouge", "noir", "vert"):
@@ -105,7 +106,7 @@ def roulette(fenetre):
                                 erreur = ""
                             else:
                                 erreur = "Entrez un numéro (0-36) ou rouge/noir/vert."
-                        # ── montant ──
+                        # Montant
                         elif etape == "montant":
                             try:
                                 montant = int(choix_montant)
@@ -115,19 +116,19 @@ def roulette(fenetre):
                                     erreur = "Mise supérieure à votre solde."
                                 else:
                                     argent -= montant
-                                    bets.append(cat_temp)
-                                    bets.append(montant)
+                                    bets.append(cat_temp) # Catégorie parié
+                                    bets.append(montant) # Montant misé
                                     choix_montant = ""
                                     choix_cat = ""
                                     cat_temp = None
                                     erreur = ""
                                     if argent == 0:
-                                        phase_mise = False
+                                        phase_mise = False # Plus de solde, on tire directement
                                     else:
                                         etape = "encore"
                             except ValueError:
                                 erreur = "Entrez un nombre valide."
-                        # ── encore ──
+                        # Encore
                         elif etape == "encore":
                             e = encore.strip().lower()
                             if e == "oui":
@@ -151,6 +152,7 @@ def roulette(fenetre):
             fenetre.blit(font.render("Roulette", True, WHITE), (W // 2 - 80, 30))
             fenetre.blit(font_small.render(f"Solde : {argent}$", True, YELLOW), (40, 30))
             fenetre.blit(font_small.render("Mises placées :", True, GREY), (40, 90))
+            # Affichage de chaque mise
             for i in range(0, len(bets), 2):
                 ligne = f"{bets[i]}  pour  {bets[i + 1]}$"
                 fenetre.blit(font_small.render(ligne, True, WHITE), (40, 120 + (i // 2) * 28))
@@ -174,7 +176,7 @@ def roulette(fenetre):
             pygame.display.flip()
             clock.tick(60)
 
-        # ── tirage ────────────────────────────────────────────────────────
+        # Tirage
         number = random.randint(0, 36)
         if number == 0:
             color = "vert"
@@ -182,7 +184,8 @@ def roulette(fenetre):
             color = "rouge"
         else:
             color = "noir"
-
+        
+        # Calcul des gains pour chaque pari
         resultats = [f"La bille tombe sur : {number} ({color})"]
         for i in range(0, len(bets), 2):
             pari = bets[i]
@@ -199,7 +202,7 @@ def roulette(fenetre):
                 resultats.append(f"Perdu sur {pari}.")
         resultats.append(f"Solde : de {startmoney}$ à {argent}$")
 
-        # ── écran résultat ────────────────────────────────────────────────
+        # Ecran de résultat
         rejouer = ""
         erreur = ""
         etape_fin = "rejouer" if argent > 0 else "fini"
@@ -239,7 +242,8 @@ def roulette(fenetre):
             for i, msg in enumerate(resultats):
                 c = GREEN if "Gagné" in msg else RED if "Perdu" in msg else WHITE
                 fenetre.blit(font_small.render(msg, True, c), (40, 200 + i * 32))
-
+            
+            # Affichage de la fin
             if etape_fin == "fini":
                 fenetre.blit(font_small.render("Plus d'argent. Entrée pour quitter.", True, RED), (40, H - 80))
             else:
