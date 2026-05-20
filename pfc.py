@@ -22,7 +22,7 @@ import random
 #         SET Argent = Argent + ?
 #         WHERE Pseudo = ?
 #         """,
-#        (montant, compte_connecte)
+#        (argent_ajout, compte_connecte)
 #     )
 # ------------------------------------------------------------------------
 
