@@ -1,7 +1,7 @@
-import sqlite3
-import os
-import hashlib
-import hmac
+import sqlite3 # Interaction avec la base de donnée
+from hashlib import pbkdf2_hmac # Pour générer le mot de passe hashé
+from hmac import compare_digest # Pour vérifier au niveau de la connection si le mot de passe est bon
+from os import urandom # Pour générer le sel aléatoire nécessaire pour hashlib
 
 base_donnee = sqlite3.connect("données/BaseDonnéeCasino.db")
 curseur = base_donnee.cursor()
@@ -21,13 +21,9 @@ def VerificationCompte(pseudo):
 #------------------------------------------------------------------------
 #Créer un compte
 def CreationCompte(pseudo,mdp,nom,prenom):
-    sel = os.urandom(16) # Génération d’un sel aléatoire. Est en bytes.
+    sel = urandom(16) # Génération d’un sel aléatoire. Est en bytes.
     # Hashage du mot de passe
-    mdp_chiffre = hashlib.pbkdf2_hmac(
-        "sha256",
-        mdp.encode(),
-        sel,
-        100_000)
+    mdp_chiffre = pbkdf2_hmac("sha256", mdp.encode(), sel, 100_000)
 
     curseur.execute(
         """
@@ -49,13 +45,9 @@ def ConnexionCompte(pseudo,mdp) :
         hash_stocke, sel = verification
 
         # Hashage du texte entré dans le champ du mot de passe dans la connexion
-        nouveau_hash = hashlib.pbkdf2_hmac(
-        "sha256",
-        mdp.encode(),
-        sel,
-        100_000)
+        nouveau_hash = pbkdf2_hmac("sha256", mdp.encode(), sel, 100_000)
 
-        return hmac.compare_digest(hash_stocke,nouveau_hash) # Vérification finale pour savoir si le mot de passe est correct.
+        return compare_digest(hash_stocke,nouveau_hash) # Vérification finale pour savoir si le mot de passe est correct.
 
 #------------------------------------------------------------------------
 #Récupérer l’argent du compte connecté
