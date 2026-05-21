@@ -121,6 +121,7 @@ def roulette(fenetre,compte):
                                     argent -= montant
                                     bets.append(cat_temp) # Catégorie parié
                                     bets.append(montant) # Montant misé
+                                    Gestion.AjoutArgent(-montant,compte)
                                     choix_montant = ""
                                     choix_cat = ""
                                     cat_temp = None
@@ -198,11 +199,13 @@ def roulette(fenetre,compte):
                 argent += gain
                 gain_total += gain
                 resultats.append(f"Gagné ! Numéro de {pari} à {gain}$")
+                Gestion.AjoutArgent(montant*36,compte)
             elif isinstance(pari, str) and pari == color:
                 gain = montant * 2
                 argent += gain
                 gain_total += gain
                 resultats.append(f"Gagné ! Couleur de {color} à {gain}$")
+                Gestion.AjoutArgent(montant*2,compte)
             else:
                 resultats.append(f"Perdu sur {pari}.")
         resultats.append(f"Solde : de {startmoney}$ à {argent}$")
@@ -226,13 +229,11 @@ def roulette(fenetre,compte):
                         rejouer = rejouer[:-1]
                     elif event.key == pygame.K_RETURN:
                         if etape_fin == "fini":
-                            Gestion.AjoutArgent(argent - startmoney, compte)
                             return
                         r = rejouer.strip().lower()
                         if r == "oui":
                             affichage_fin = False
                         elif r == "non":
-                            Gestion.AjoutArgent(gain_total,compte)
                             return
                         else:
                             erreur = "Tapez oui ou non."

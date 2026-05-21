@@ -65,6 +65,9 @@ def chifoumi(ecran,compte):
         pygame.display.flip()
         clock.tick(60)
     
+    #on retire la mise
+    Gestion.AjoutArgent(-argent2,compte)
+
     # initilisation du jeu
     pierre = "pierre"
     ciseaux = "ciseaux"
@@ -117,11 +120,10 @@ def chifoumi(ecran,compte):
     # fin du jeu (logique conservée)
     ecran.fill((0,0,0))
     if victoire_joueur == 3:
-        msg = f"Vous avez gagné {argent2 * 3}, veuillez réessayer en remisant votre argent !"
-        Gestion.AjoutArgent(argent2*3,compte)
+        msg = f"Vous avez gagné {argent2 * 2}, veuillez réessayer en remisant votre argent !"
+        Gestion.AjoutArgent(argent2*2,compte)
     else:
         msg = f"Vous avez perdu votre mise de {argent2}, ne vous laissez pas humilier par une IA"
-        Gestion.AjoutArgent(-argent2,compte)
 
     font = pygame.font.Font(None, 30)
     txt = font.render(msg, True, (255,255,255))
