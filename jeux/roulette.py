@@ -1,5 +1,6 @@
 import pygame
 import random
+from données import GestionBD as Gestion
 
 WHITE = (255, 255, 255)
 RED = (200, 50, 50)
@@ -16,7 +17,7 @@ nombre_rouge = {
 }
 
 
-def roulette(fenetre):
+def roulette(fenetre,compte):
     pygame.font.init()
     font = pygame.font.Font(None, 38)
     font_small = pygame.font.Font(None, 28)
@@ -27,6 +28,8 @@ def roulette(fenetre):
     texte_saisi = ""
     erreur = ""
     argent = None
+
+    argent_compte = Gestion.RecupArgent(compte)
 
     while argent is None:
         for event in pygame.event.get():
@@ -39,16 +42,16 @@ def roulette(fenetre):
                 elif event.key == pygame.K_BACKSPACE:
                     texte_saisi = texte_saisi[:-1]
                 elif event.key == pygame.K_RETURN:
-                    try:
-                        val = int(texte_saisi)
-                        if val <= 0:
-                            erreur = "Entrez un nombre positif."
-                        else:
-                            argent = val
-                    except ValueError:
-                        erreur = "Entrez un nombre valide."
+                        if compte != "" :
+                            if int(texte_saisi) > argent_compte :
+                                erreur = "Erreur. Vous n’avez pas assez d’argent sur votre compte"
+                            else :
+                                argent = int(texte_saisi)
+                        else :
+                            erreur = "Erreur. Vous n’êtes pas connecté."
                 elif event.unicode.isdigit():
                     texte_saisi += event.unicode
+
 
         fenetre.fill(DARK)
         titre = font.render("Roulette", True, WHITE)
@@ -68,7 +71,7 @@ def roulette(fenetre):
         startmoney = argent # Solde de début
         bets = [] # Liste aplatie [catégorie, montant, catégorie, montant, ...]
         cat_temp = None
-        cat_temp = None
+        gain_total = 0 # Gain total.
         choix_cat = ""
         choix_montant = ""
         encore = ""
@@ -193,10 +196,12 @@ def roulette(fenetre):
             if isinstance(pari, int) and pari == number:
                 gain = montant * 36
                 argent += gain
+                gain_total += gain
                 resultats.append(f"Gagné ! Numéro de {pari} à {gain}$")
             elif isinstance(pari, str) and pari == color:
                 gain = montant * 2
                 argent += gain
+                gain_total += gain
                 resultats.append(f"Gagné ! Couleur de {color} à {gain}$")
             else:
                 resultats.append(f"Perdu sur {pari}.")
@@ -208,6 +213,7 @@ def roulette(fenetre):
         etape_fin = "rejouer" if argent > 0 else "fini"
         affichage_fin = True
 
+        argent_mis_a_jour = False
         while affichage_fin:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -220,11 +226,13 @@ def roulette(fenetre):
                         rejouer = rejouer[:-1]
                     elif event.key == pygame.K_RETURN:
                         if etape_fin == "fini":
+                            Gestion.AjoutArgent(argent - startmoney, compte)
                             return
                         r = rejouer.strip().lower()
                         if r == "oui":
                             affichage_fin = False
                         elif r == "non":
+                            Gestion.AjoutArgent(gain_total,compte)
                             return
                         else:
                             erreur = "Tapez oui ou non."
@@ -245,6 +253,9 @@ def roulette(fenetre):
             
             # Affichage de la fin
             if etape_fin == "fini":
+                if not argent_mis_a_jour:
+                    Gestion.AjoutArgent(argent - startmoney, compte)
+                    argent_mis_a_jour = True
                 fenetre.blit(font_small.render("Plus d'argent. Entrée pour quitter.", True, RED), (40, H - 80))
             else:
                 fenetre.blit(font_small.render("Rejouer ? (oui/non)", True, GREY), (40, H - 110))

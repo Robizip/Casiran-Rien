@@ -9,7 +9,7 @@ DARK = (30, 30, 30)
 YELLOW = (255, 215, 0) 
 
 
-def machine_sous(fenetre):
+def machine_sous(fenetre,compte):
     font = pygame.font.Font(None, 38)
     font_big = pygame.font.Font(None, 90)
     font_small = pygame.font.Font(None, 28)

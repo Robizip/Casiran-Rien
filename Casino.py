@@ -103,7 +103,7 @@ while running:
                         if compte_connecte and argent.isdigit():
                             montant = int(argent)
                             # Argent en base
-                            Gestion.AjoutArgent(argent)
+                            Gestion.AjoutArgent(argent,compte_connecte)
                             
                             # Mise à jour de l'affichage du solde
                         argent_compte = Gestion.RecupArgent(compte_connecte)
@@ -116,19 +116,22 @@ while running:
                         popup_ouvert = True
                         champ_actif = "argent"
                     elif button_loto.collidepoint(event.pos):
-                        loto_run(fenetre)
+                        loto_run(fenetre,compte_connecte)
                     elif button_chifoumi.collidepoint(event.pos):
-                        chifoumi_run(fenetre)
+                        chifoumi_run(fenetre,compte_connecte)
                     elif button_blackjack.collidepoint(event.pos):
-                        blackjack_run(fenetre)
+                        blackjack_run(fenetre,compte_connecte)
                     elif button_roulette.collidepoint(event.pos):
-                        roulette_run(fenetre)
+                        roulette_run(fenetre,compte_connecte)
                     elif button_bp.collidepoint(event.pos):
-                        bataillepolitique_run(fenetre)
+                        bataillepolitique_run(fenetre,compte_connecte)
                     elif button_bm.collidepoint(event.pos):
-                        machine_sous_run(fenetre)
+                        machine_sous_run(fenetre,compte_connecte)
                     elif button_de.collidepoint(event.pos):
-                        sim_de_run(fenetre)
+                        sim_de_run(fenetre,compte_connecte)
+                    
+                    # Update?
+                    argent_compte = Gestion.RecupArgent(compte_connecte)
 
             elif etat == "connexion":
                 if input_pseudo.collidepoint(event.pos):

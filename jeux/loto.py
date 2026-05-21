@@ -1,6 +1,6 @@
 import pygame
 import random
-
+from données import GestionBD as Gestion
 
 
 WHITE = (255, 255, 255)
@@ -13,12 +13,13 @@ BLUE = (60, 60, 200)
 HIGHLIGHT = (200, 160, 0)
  
  
-def loto(fenetre):
+def loto(fenetre,compte):
     font = pygame.font.Font(None, 30)
     font_small = pygame.font.Font(None, 24)
     font_big = pygame.font.Font(None, 42)
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
+    argent_compte = Gestion.RecupArgent(compte)
 
     # Grille des boutons 
     boutons = []

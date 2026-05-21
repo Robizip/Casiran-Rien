@@ -1,5 +1,6 @@
 import pygame
 import random
+from données import GestionBD as Gestion
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -11,7 +12,7 @@ DARK = (30, 30, 30)
 YELLOW = (255, 215, 0)
 
 
-def blackjack(fenetre):
+def blackjack(fenetre,compte):
     font = pygame.font.Font(None, 48)
     font_small = pygame.font.Font(None, 32)
     clock = pygame.time.Clock()
@@ -20,6 +21,8 @@ def blackjack(fenetre):
     texte_saisi = ""
     erreur = ""
     argent2 = None
+
+    argent_compte = Gestion.RecupArgent(compte)
 
     while argent2 is None:
         for event in pygame.event.get():
@@ -32,14 +35,13 @@ def blackjack(fenetre):
                 elif event.key == pygame.K_BACKSPACE:
                     texte_saisi = texte_saisi[:-1]
                 elif event.key == pygame.K_RETURN:
-                    try:
-                        val = int(texte_saisi)
-                        if val <= 0:
-                            erreur = "Entrez un nombre positif."
-                        else:
-                            argent2 = val
-                    except ValueError:
-                        erreur = "Entrez un nombre valide."
+                        if compte != "" :
+                            if int(texte_saisi) > argent_compte :
+                                erreur = "Erreur. Vous n’avez pas assez d’argent sur votre compte"
+                            else :
+                                argent2 = int(texte_saisi)
+                        else :
+                            erreur = "Erreur. Vous n’êtes pas connecté."
                 elif event.unicode.isdigit():
                     texte_saisi += event.unicode
 
@@ -144,6 +146,7 @@ def blackjack(fenetre):
             r = font.render(texte, True, couleur)
             fenetre.blit(r, (fenetre.get_width() // 2 - r.get_width() // 2, 500))
             g = font_small.render(f"Argent final : {gain}€", True, couleur)
+            Gestion.AjoutArgent(gain,compte)
             fenetre.blit(g, (fenetre.get_width() // 2 - g.get_width() // 2, 570))
             hint = font_small.render("Cliquez pour revenir au menu", True, GREY)
             fenetre.blit(hint, (fenetre.get_width() // 2 - hint.get_width() // 2, 630))

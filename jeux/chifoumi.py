@@ -1,5 +1,6 @@
 import pygame
 import random
+from données import GestionBD as Gestion
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -10,10 +11,12 @@ GREY = (180, 180, 180)
 DARK = (30, 30, 30)
 YELLOW = (255, 215, 0)
 
-def chifoumi(ecran):
+def chifoumi(ecran,compte):
     font = pygame.font.Font(None, 48)
     font_small = pygame.font.Font(None, 32)
     clock = pygame.time.Clock()
+
+    argent_compte = Gestion.RecupArgent(compte)
 
     # Saisie de la mise
     texte_saisi = ""
@@ -31,14 +34,13 @@ def chifoumi(ecran):
                 elif event.key == pygame.K_BACKSPACE:
                     texte_saisi = texte_saisi[:-1]
                 elif event.key == pygame.K_RETURN:
-                    try:
-                        val = int(texte_saisi)
-                        if val <= 0:
-                            erreur = "Entrez un nombre positif."
-                        else:
-                            argent2 = val # Quitte la boucle dès que la mise est validée
-                    except ValueError:
-                        erreur = "Entrez un nombre valide."
+                        if compte != "" :
+                            if int(texte_saisi) > argent_compte :
+                                erreur = "Erreur. Vous n’avez pas assez d’argent sur votre compte"
+                            else :
+                                argent2 = int(texte_saisi)
+                        else :
+                            erreur = "Erreur. Vous n’êtes pas connecté."
                 elif event.unicode.isdigit():
                     texte_saisi += event.unicode
 
@@ -116,12 +118,14 @@ def chifoumi(ecran):
     ecran.fill((0,0,0))
     if victoire_joueur == 3:
         msg = f"Vous avez gagné {argent2 * 3}, veuillez réessayer en remisant votre argent !"
+        Gestion.AjoutArgent(argent2*3,compte)
     else:
         msg = f"Vous avez perdu votre mise de {argent2}, ne vous laissez pas humilier par une IA"
+        Gestion.AjoutArgent(-argent2,compte)
 
     font = pygame.font.Font(None, 30)
     txt = font.render(msg, True, (255,255,255))
     ecran.blit(txt, (50, 400))
     pygame.display.flip()
 
-    pygame.time.wait(5000) # Bloque tout pendant 5 secondes 
+    pygame.time.wait(3000) # Bloque tout pendant 3 secondes 

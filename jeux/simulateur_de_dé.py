@@ -1,6 +1,8 @@
 import pygame
 import random
- 
+from données import GestionBD as Gestion
+
+
 WHITE = (255, 255, 255)
 RED = (200, 50, 50)
 GREEN = (50, 200, 50)
@@ -10,7 +12,7 @@ YELLOW = (255, 215, 0)
 BLUE = (60, 60, 200)
  
  
-def sim_de(fenetre):
+def sim_de(fenetre,compte):
     font = pygame.font.Font(None, 38)
     font_small = pygame.font.Font(None, 28)
     clock = pygame.time.Clock()
@@ -19,6 +21,7 @@ def sim_de(fenetre):
     # Saisie de la mise
     texte_saisi = ""
     erreur = ""
+    argent_compte = Gestion.RecupArgent(compte)
     argent2 = None
 
     while argent2 is None:
@@ -32,14 +35,13 @@ def sim_de(fenetre):
                 elif event.key == pygame.K_BACKSPACE:
                     texte_saisi = texte_saisi[:-1]
                 elif event.key == pygame.K_RETURN:
-                    try:
-                        val = int(texte_saisi)
-                        if val <= 0:
-                            erreur = "Entrez un nombre positif."
-                        else:
-                            argent2 = val
-                    except ValueError:
-                        erreur = "Entrez un nombre valide."
+                        if compte != "" :
+                            if int(texte_saisi) > argent_compte :
+                                erreur = "Erreur. Vous n’avez pas assez d’argent sur votre compte"
+                            else :
+                                argent2 = int(texte_saisi)
+                        else :
+                            erreur = "Erreur. Vous n’êtes pas connecté."
                 elif event.unicode.isdigit():
                     texte_saisi += event.unicode
 
@@ -167,9 +169,11 @@ def sim_de(fenetre):
     if manche_joueurs == 3:
         msg_fin = f"BRAVO ! Vous avez gagnez la partie ! Vous remportez {argent2 * 2}€"
         col_fin = GREEN
+        Gestion.AjoutArgent(argent2*2,compte)
     else:
         msg_fin = f"L'ordi a gagné la partie... Vous perdez votre mise de {argent2}€"
         col_fin = RED
+        Gestion.AjoutArgent(-argent2,compte)
     attente_fin = True
     while attente_fin:
         for event in pygame.event.get():
