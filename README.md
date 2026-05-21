@@ -4,7 +4,7 @@ Bienvenue dans le manuel d’utilisation de la version électronique du Casiran 
 
 ---
 ## Prérequis : 
-- Avoir la librairie Pygames d’installé sur son ordinateur
+- Avoir la librairie Pygames d’installé sur son Python. 
 ---
 ## Informations :
 - Pour quitter ou retourner en arrière dans l’application, utiliser la touche échap de votre clavier.
@@ -15,7 +15,7 @@ Bienvenue dans le manuel d’utilisation de la version électronique du Casiran 
 ---
 ## Règles des jeux :
 - ### Loto :
-    - Il faut sélectionner les 5 numéros que vous voulez, et le numéro complémentaire allant de 1 jusqu'à 10. Il faut minimum 2€ sur le compte pour pouvoir lancer ce jeu, sinon, il ne se passera rien.
+    - Il faut sélectionner les 5 numéros que vous voulez + le numéro complémentaire. Il faut minimum 2€ sur le compte pour pouvoir lancer ce jeu, sinon, il ne se passera rien.
 - ### Simulateur de dé : 
     - Il faut gagner 3 manches de jets de dés contre l'ordinateur avant lui. C’est un jeu de pur hasard où vous choisissez à chaque manche le nombre de jets et le nombre de faces des dés utilisés. 
 - ### Blackjack (Lite) :
