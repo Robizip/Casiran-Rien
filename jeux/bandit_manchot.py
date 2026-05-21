@@ -21,6 +21,7 @@ def machine_sous(fenetre,compte):
     W, H = fenetre.get_size()
     symboles = [":)", "Ø", ":(", "•", "€", "$", "#", "&", "<>", "7"]
     tirage = None # Pas encore joué
+    presence_argent = True # Variable de vérification de la présence d’argent sur le compte connecté
     message = ""
     couleur_msg = WHITE
     button_jouer = pygame.Rect(W // 2 - 100, H - 150, 200, 55)
@@ -34,41 +35,56 @@ def machine_sous(fenetre,compte):
                     return
                 elif event.key == pygame.K_SPACE:
                     Gestion.AjoutArgent(-5,compte)
-                    tirage = [random.choice(symboles) for _ in range(3)]
-                    unique = list(set(tirage))
-                    if len(unique) == 1: # Triple identique
-                        if unique[0] == "7":
-                            message = " JACKPOT !!! "
-                            couleur_msg = YELLOW
-                        else:
-                            message = f"Bravo, 3 {unique[0]} identiques !"
-                            couleur_msg = GREEN
-                    elif len(unique) == 2: # Paire
-                        message = "Deux symboles identiques, pas mauvais !"
-                        couleur_msg = WHITE
-                    else: # Rien
-                        message = "Perdu, réessaie !"
+                    verif_arg = Gestion.RecupArgent(compte)
+                    if verif_arg < 0 :
+                        message = f"Plus assez d’argent sur le compte. Retour au menu."
+                        presence_argent = False
                         couleur_msg = RED
+                        Gestion.AjoutArgent(5,compte) # Compenser le négatif de l’opération de vérification présente juste avant
+                    if presence_argent :
+                        tirage = [random.choice(symboles) for _ in range(3)]
+                        unique = list(set(tirage))
+                        if len(unique) == 1: # Triple identique
+                            if unique[0] == "7":
+                                message = " JACKPOT !!! "
+                                couleur_msg = YELLOW
+                            else:
+                                message = f"Bravo, 3 {unique[0]} identiques !"
+                                couleur_msg = GREEN
+                        elif len(unique) == 2: # Paire
+                            message = "Deux symboles identiques, pas mauvais !"
+                            couleur_msg = WHITE
+                        else: # Rien
+                            message = "Perdu, réessaie !"
+                            couleur_msg = RED
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_jouer.collidepoint(event.pos):
                     Gestion.AjoutArgent(-5,compte)
-                    tirage = [random.choice(symboles) for _ in range(3)]
-                    unique = list(set(tirage))
-                    if len(unique) == 1:
-                        if unique[0] == "7":
-                            message = " JACKPOT !!! "
-                            couleur_msg = GREEN
-                            Gestion.AjoutArgent(500,compte)
-                        else:
-                            message = f"Bravo, 3 ({unique[0]})  identiques ! vous gagnez 500€"
-                            couleur_msg = GREEN
-                    elif len(unique) == 2:
-                        message = "Deux symboles identiques, pas mauvais ! Vous gagnez 15€"
-                        couleur_msg = WHITE
-                        Gestion.AjoutArgent(15,compte)
-                    else:
-                        message = "Perdu, réessaie !"
+                    verif_arg = Gestion.RecupArgent(compte)
+                    if verif_arg < 0 :
+                        message = f"Plus assez d’argent sur le compte. Retour au menu."
+                        presence_argent = False
                         couleur_msg = RED
+                        Gestion.AjoutArgent(5,compte)
+                    if presence_argent :
+                        tirage = [random.choice(symboles) for _ in range(3)]
+                        unique = list(set(tirage))
+                        if len(unique) == 1:
+                            if unique[0] == "7":
+                                message = " JACKPOT !!! "
+                                couleur_msg = GREEN
+                                Gestion.AjoutArgent(777,compte)
+                            else:
+                                message = f'Bravo, 3 ("{unique[0]}")  identiques ! vous gagnez 500€'
+                                couleur_msg = GREEN
+                                Gestion.AjoutArgent(500,compte)
+                        elif len(unique) == 2:
+                            message = "Deux symboles identiques, pas mauvais ! Vous gagnez 15€"
+                            couleur_msg = WHITE
+                            Gestion.AjoutArgent(15,compte)
+                        else:
+                            message = "Perdu, réessaie !"
+                            couleur_msg = RED
         fenetre.fill(DARK)
         titre = font.render("Bandit Manchot", True, WHITE)
         fenetre.blit(titre, (W // 2 - titre.get_width() // 2, 60))
@@ -92,3 +108,6 @@ def machine_sous(fenetre,compte):
         fenetre.blit(hint, (W // 2 - hint.get_width() // 2, H - 45))
         pygame.display.flip()
         clock.tick(60)
+        if not presence_argent :
+            pygame.time.wait(5000)
+            return

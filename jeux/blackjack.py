@@ -137,7 +137,7 @@ def blackjack(fenetre,compte):
                 resultat_final = ("Vous gagnez !", GREEN, argent2 * 2)
                 Gestion.AjoutArgent(argent2*2,compte)
             elif hit > 21 or lost == 1:
-                resultat_final = ("Dommage, vous perdez tout...", RED, 0)
+                resultat_final = (f"Dommage, vous avez perdu vos {argent2}€...", RED, 0)
 
         fenetre.fill(DARK)
 

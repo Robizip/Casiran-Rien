@@ -121,7 +121,6 @@ def roulette(fenetre,compte):
                                     argent -= montant
                                     bets.append(cat_temp) # Catégorie parié
                                     bets.append(montant) # Montant misé
-                                    Gestion.AjoutArgent(-montant,compte)
                                     choix_montant = ""
                                     choix_cat = ""
                                     cat_temp = None
@@ -255,7 +254,7 @@ def roulette(fenetre,compte):
             # Affichage de la fin
             if etape_fin == "fini":
                 if not argent_mis_a_jour:
-                    Gestion.AjoutArgent(argent - startmoney, compte)
+                    Gestion.AjoutArgent(-startmoney, compte)
                     argent_mis_a_jour = True
                 fenetre.blit(font_small.render("Plus d'argent. Entrée pour quitter.", True, RED), (40, H - 80))
             else:

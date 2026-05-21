@@ -19,7 +19,8 @@ def loto(fenetre,compte):
     font_big = pygame.font.Font(None, 42)
     clock = pygame.time.Clock()
     W, H = fenetre.get_size()
-    argent_compte = Gestion.RecupArgent(compte)
+    argent_compte = Gestion.RecupArgent(compte) # Permet de récupérer la quantité d‘argent présente sur le compte
+    presence_argent = True # Variable de vérification de si il reste de l’argent sur le compte connecté
 
     #test si l'utilissateur a assez d'argent
     if argent_compte < 2:
@@ -48,34 +49,42 @@ def loto(fenetre,compte):
                     return
                 if event.key == pygame.K_SPACE and len(numeros) == 6:
                     Gestion.AjoutArgent(-2,compte)
-                    resultat = None
-                    pool = list(range(1, 50))
-                    gagnants = random.sample(pool, 5)
-                    pool_comp = [n for n in pool if n not in gagnants]
-                    comp = random.choice(pool_comp) # Numéro complémentaire
-                    bons = set(numeros[:5]) & set(gagnants) # 5 numéros principaux
-                    bon_comp = numeros[5] == comp
-                    nb = len(bons)
-                    if nb == 5 and bon_comp: # Tout juste
-                        msg = "JACKPOT !!!"
-                    elif nb == 5:
-                        msg = "Rang 2 — 5 bons numéros !"
-                    elif nb == 4 and bon_comp:
-                        msg = "Rang 3 — 4 bons + complémentaire !"
-                    elif nb == 4:
-                        msg = "Rang 4 — 4 bons numéros"
-                    elif nb == 3 and bon_comp:
-                        msg = "Rang 5 — 3 bons + complémentaire"
-                    elif nb == 3:
-                        msg = "Rang 6 — 3 bons numéros"
-                    elif nb == 2 and bon_comp:
-                        msg = "Rang 7 — 2 bons + complémentaire"
-                    elif nb == 2:
-                        msg = "Rang 8 — 2 bons numéros"
-                    else:
-                        msg = "Rien du tout..."
-                    resultat = (gagnants, comp, bons, bon_comp, msg)
- 
+                    verif_arg = Gestion.RecupArgent(compte)
+                    if verif_arg < 0 :
+                        msg = "Plus assez d’argent sur le compte. Retour au menu."
+                        presence_argent = False
+                        couleur_msg = RED
+                        resultat = ([],0,set([]),False,msg) # Simuler un résultat vide
+                        Gestion.AjoutArgent(2,compte) # Pour éviter d’avoir un compte au négatif
+                    if presence_argent :
+                        resultat = None
+                        pool = list(range(1, 50))
+                        gagnants = random.sample(pool, 5)
+                        pool_comp = [n for n in pool if n not in gagnants]
+                        comp = random.choice(pool_comp) # Numéro complémentaire
+                        bons = set(numeros[:5]) & set(gagnants) # 5 numéros principaux. Utilisation de l’intersection pour récupérer les numérps gagnants.
+                        bon_comp = numeros[5] == comp # Vérifier le numéro complémentaire
+                        nb = len(bons) # Vérifier combien de numéros sont bons.
+                        if nb == 5 and bon_comp: # Tout juste
+                            msg = "JACKPOT !!!"
+                        elif nb == 5:
+                            msg = "Rang 2 — 5 bons numéros !"
+                        elif nb == 4 and bon_comp:
+                            msg = "Rang 3 — 4 bons + complémentaire !"
+                        elif nb == 4:
+                            msg = "Rang 4 — 4 bons numéros"
+                        elif nb == 3 and bon_comp:
+                            msg = "Rang 5 — 3 bons + complémentaire"
+                        elif nb == 3:
+                            msg = "Rang 6 — 3 bons numéros"
+                        elif nb == 2 and bon_comp:
+                            msg = "Rang 7 — 2 bons + complémentaire"
+                        elif nb == 2:
+                            msg = "Rang 8 — 2 bons numéros"
+                        else:
+                            msg = "Rien du tout..."
+                        resultat = (gagnants, comp, bons, bon_comp, msg)
+    
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for rect, num in boutons:
                     if rect.collidepoint(event.pos):
@@ -86,44 +95,51 @@ def loto(fenetre,compte):
                             numeros.append(num)
                             resultat = None
                 
-                # Recoder une deuxième fois mais permet de  faire fonctionner le jeu
+                # Recoder une deuxième fois mais permet de faire fonctionner le jeu
                 if button_lancer.collidepoint(event.pos) and len(numeros) == 6:
                     Gestion.AjoutArgent(-2,compte)
-                    resultat = None
-                    pool = list(range(1, 50))
-                    gagnants = random.sample(pool, 5)
-                    pool_comp = [n for n in pool if n not in gagnants]
-                    comp = random.choice(pool_comp)
-                    bons = set(numeros[:5]) & set(gagnants)
-                    bon_comp = numeros[5] == comp
-                    nb = len(bons)
-                    if nb == 5 and bon_comp:
-                        msg = "JACKPOT !!!"
-                    elif nb == 5:
-                        msg = "Rang 2 — 5 bons numéros !"
-                    elif nb == 4 and bon_comp:
-                        msg = "Rang 3 — 4 bons + complémentaire !"
-                    elif nb == 4:
-                        msg = "Rang 4 — 4 bons numéros"
-                    elif nb == 3 and bon_comp:
-                        msg = "Rang 5 — 3 bons + complémentaire"
-                    elif nb == 3:
-                        msg = "Rang 6 — 3 bons numéros"
-                    elif nb == 2 and bon_comp:
-                        msg = "Rang 7 — 2 bons + complémentaire"
-                    elif nb == 2:
-                        msg = "Rang 8 — 2 bons numéros"
-                    else:
-                        msg = "Rien du tout..."
-                    resultat = (gagnants, comp, bons, bon_comp, msg)
- 
-                if button_reset.collidepoint(event.pos):
-                    numeros = []
-                    complementaire = None
-                    resultat = None
+                    verif_arg = Gestion.RecupArgent(compte)
+                    if verif_arg < 0 :
+                        msg = "Plus assez d’argent sur le compte. Retour au menu."
+                        presence_argent = False
+                        couleur_msg = RED
+                        resultat = ([],0,set([]),False,msg)
+                        Gestion.AjoutArgent(2,compte)
+                    if presence_argent :
+                        resultat = None
+                        pool = list(range(1, 50))
+                        gagnants = random.sample(pool, 5)
+                        pool_comp = [n for n in pool if n not in gagnants]
+                        comp = random.choice(pool_comp)
+                        bons = set(numeros[:5]) & set(gagnants)
+                        bon_comp = numeros[5] == comp
+                        nb = len(bons)
+                        if nb == 5 and bon_comp:
+                            msg = "JACKPOT !!!"
+                        elif nb == 5:
+                            msg = "Rang 2 — 5 bons numéros !"
+                        elif nb == 4 and bon_comp:
+                            msg = "Rang 3 — 4 bons + complémentaire !"
+                        elif nb == 4:
+                            msg = "Rang 4 — 4 bons numéros"
+                        elif nb == 3 and bon_comp:
+                            msg = "Rang 5 — 3 bons + complémentaire"
+                        elif nb == 3:
+                            msg = "Rang 6 — 3 bons numéros"
+                        elif nb == 2 and bon_comp:
+                            msg = "Rang 7 — 2 bons + complémentaire"
+                        elif nb == 2:
+                            msg = "Rang 8 — 2 bons numéros"
+                        else:
+                            msg = "Rien du tout..."
+                        resultat = (gagnants, comp, bons, bon_comp, msg)
+    
+                    if button_reset.collidepoint(event.pos):
+                        numeros = []
+                        complementaire = None
+                        resultat = None
  
         fenetre.fill(DARK)
- 
         titre = font_big.render("Loto", True, WHITE)
         fenetre.blit(titre, (W // 2 - titre.get_width() // 2, 15))
 
@@ -161,11 +177,13 @@ def loto(fenetre,compte):
                      (button_reset.x + 45, button_reset.y + 12))
  
         if resultat:
-            gagnants, comp, bons, bon_comp, msg = resultat
-            r1 = font_small.render(f"Tirage : {sorted(gagnants)}  +  complémentaire : {comp}", True, WHITE)
-            fenetre.blit(r1, (50, 750))
+            if verif_arg > -1 :
+                gagnants, comp, bons, bon_comp, msg = resultat
+                r1 = font_small.render(f"Tirage : {sorted(gagnants)}  +  complémentaire : {comp}", True, WHITE)
+                fenetre.blit(r1, (50, 750))
             couleur_msg = GREEN if "Rang" in msg or "JACKPOT, vous gagnez 2 000 000" in msg else YELLOW if "2 bons" in msg else RED
-            Gestion.AjoutArgent(2000000,compte)
+            if "JACKPOT" in msg:
+                Gestion.AjoutArgent(2000000,compte)
             r2 = font_small.render(msg, True, couleur_msg)
             fenetre.blit(r2, (50, 775))
  
@@ -174,3 +192,6 @@ def loto(fenetre,compte):
  
         pygame.display.flip()
         clock.tick(60)
+        if not presence_argent :
+            pygame.time.wait(3000)
+            return
