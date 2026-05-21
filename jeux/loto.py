@@ -21,6 +21,10 @@ def loto(fenetre,compte):
     W, H = fenetre.get_size()
     argent_compte = Gestion.RecupArgent(compte)
 
+    #test si l'utilissateur a assez d'argent
+    if argent_compte < 2:
+        return
+    Gestion.AjoutArgent(-2,compte)
     # Grille des boutons 
     boutons = []
     for i in range(49):
@@ -159,7 +163,8 @@ def loto(fenetre,compte):
             gagnants, comp, bons, bon_comp, msg = resultat
             r1 = font_small.render(f"Tirage : {sorted(gagnants)}  +  complémentaire : {comp}", True, WHITE)
             fenetre.blit(r1, (50, 750))
-            couleur_msg = GREEN if "Rang" in msg or "JACKPOT, vous gagnez 20 000 000" in msg else YELLOW if "2 bons" in msg else RED
+            couleur_msg = GREEN if "Rang" in msg or "JACKPOT, vous gagnez 2 000 000" in msg else YELLOW if "2 bons" in msg else RED
+            Gestion.AjoutArgent(2000000,compte)
             r2 = font_small.render(msg, True, couleur_msg)
             fenetre.blit(r2, (50, 775))
  

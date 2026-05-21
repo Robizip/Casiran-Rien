@@ -1,5 +1,6 @@
 import pygame
 import random
+from données import GestionBD as Gestion
 
 WHITE = (255, 255, 255)
 RED = (200, 50, 50)
@@ -10,6 +11,10 @@ YELLOW = (255, 215, 0)
 
 
 def machine_sous(fenetre,compte):
+    argent_compte = Gestion.RecupArgent(compte)
+    if argent_compte < 5:
+        return
+    Gestion.AjoutArgent(-5,compte)
     font = pygame.font.Font(None, 38)
     font_big = pygame.font.Font(None, 90)
     font_small = pygame.font.Font(None, 28)
@@ -55,9 +60,11 @@ def machine_sous(fenetre,compte):
                         else:
                             message = f"Bravo, 3 ({unique[0]})  identiques ! vous gagnez 500€"
                             couleur_msg = GREEN
+                            Gestion.AjoutArgent(500,compte)
                     elif len(unique) == 2:
-                        message = "Deux symboles identiques, pas mauvais ! Vous gagnez 25€"
+                        message = "Deux symboles identiques, pas mauvais ! Vous gagnez 15€"
                         couleur_msg = WHITE
+                        Gestion.AjoutArgent(15,compte)
                     else:
                         message = "Perdu, réessaie !"
                         couleur_msg = RED

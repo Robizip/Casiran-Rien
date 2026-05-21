@@ -66,6 +66,9 @@ def blackjack(fenetre,compte):
         pygame.display.flip()
         clock.tick(60)
 
+    #on enlève la mise du compte
+    Gestion.AjoutArgent(-argent2,compte)
+    
     # Jeu en lui-même
     def nouveau_jeu():
         carte = [
@@ -129,8 +132,10 @@ def blackjack(fenetre,compte):
         if partie_finie and resultat_final is None:
             if hit == 21:
                 resultat_final = ("Blackjack ! Jackpot !", YELLOW, argent2 * 3)
+                Gestion.AjoutArgent(argent2*3,compte)
             elif hit < 21 and lost != 1 or win == 1:
                 resultat_final = ("Vous gagnez !", GREEN, argent2 * 2)
+                Gestion.AjoutArgent(argent2*2,compte)
             elif hit > 21 or lost == 1:
                 resultat_final = ("Dommage, vous perdez tout...", RED, 0)
 
