@@ -21,7 +21,8 @@ def VerificationCompte(pseudo):
 #------------------------------------------------------------------------
 #Créer un compte
 def CreationCompte(pseudo,mdp,nom,prenom):
-    sel = os.urandom(16)
+    sel = os.urandom(16) # Génération d’un sel aléatoire. Est en bytes.
+    # Hashage du mot de passe
     mdp_chiffre = hashlib.pbkdf2_hmac(
         "sha256",
         mdp.encode(),
@@ -41,19 +42,20 @@ def CreationCompte(pseudo,mdp,nom,prenom):
 def ConnexionCompte(pseudo,mdp) :
         verification = curseur.execute(
         "SELECT MotDePasse, Sel FROM Base_Données_Comptes WHERE Pseudo = ?",
-        (pseudo,)).fetchone()
+        (pseudo,)).fetchone() # Récupération d’un éventuel mot de passe hashé avec son sel d’après un pseudo donné
 
-        if not verification :
+        if not verification : # Si le compte n’existe pas
             return False
         hash_stocke, sel = verification
 
+        # Hashage du texte entré dans le champ du mot de passe dans la connexion
         nouveau_hash = hashlib.pbkdf2_hmac(
         "sha256",
         mdp.encode(),
         sel,
         100_000)
 
-        return hmac.compare_digest(hash_stocke,nouveau_hash)
+        return hmac.compare_digest(hash_stocke,nouveau_hash) # Vérification finale pour savoir si le mot de passe est correct.
 
 #------------------------------------------------------------------------
 #Récupérer l’argent du compte connecté
