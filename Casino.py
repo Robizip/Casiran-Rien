@@ -1,18 +1,14 @@
 import pygame
-import sqlite3
-import hashlib
-from loto import loto as loto_run
-from pfc import chifoumi as chifoumi_run
-from blackjack import blackjack as blackjack_run
-from roulette import roulette as roulette_run
-from bandit_manchot import machine_sous as machine_sous_run
-from simulateur_de_dé import sim_de as sim_de_run
-from Expulsion_Election import bataillepolitique as bataillepolitique_run
+import données.GestionBD as Gestion
+from jeux.loto import loto as loto_run
+from jeux.chifoumi import chifoumi as chifoumi_run
+from jeux.blackjack import blackjack as blackjack_run
+from jeux.roulette import roulette as roulette_run
+from jeux.bandit_manchot import machine_sous as machine_sous_run
+from jeux.simulateur_de_dé import sim_de as sim_de_run
+from jeux.Expulsion_Election import bataillepolitique as bataillepolitique_run
 
 pygame.init()
-
-base_donnee = sqlite3.connect("BaseDonnéeCasino.db")
-curseur = base_donnee.cursor()
 
 # couleurs
 WHITE = (255, 255, 255)
@@ -31,7 +27,7 @@ fenetre = pygame.display.set_mode((900, 900))
 pygame.display.set_caption("Menu Jeux")
 
 # fond
-fond = pygame.image.load('sino.jpg')
+fond = pygame.image.load('images/sino.jpg')
 fond = fond.convert()
 fond = pygame.transform.scale(fond, fenetre.get_size())
 
@@ -107,25 +103,10 @@ while running:
                         if compte_connecte and argent.isdigit():
                             montant = int(argent)
                             # Argent en base
-                            curseur.execute(
-                                """
-                                UPDATE Base_Données_Comptes
-                                SET Argent = Argent + ?
-                                WHERE Pseudo = ?
-                                """,
-                               (montant, compte_connecte)
-                        )
-                            base_donnee.commit()
+                            Gestion.AjoutArgent(argent)
+                            
                             # Mise à jour de l'affichage du solde
-                            argent_stock_compte = curseur.execute(
-                                """
-                                SELECT Argent
-                                FROM Base_Données_Comptes
-                                WHERE Pseudo = ?
-                                """,
-                                (compte_connecte,)
-                        )
-                        argent_compte = argent_stock_compte.fetchone()[0]
+                        argent_compte = Gestion.RecupArgent(compte_connecte)
                     argent = ""
                     popup_ouvert = False
                     champ_actif = None
@@ -156,20 +137,11 @@ while running:
                     champ_actif = "mdp_connexion"
                 elif button_valider_connect.collidepoint(event.pos):
                     # Vérification du pseudo et mot de passe
-                    verif = curseur.execute(
-                        "SELECT * FROM Base_Données_Comptes WHERE Pseudo = ? AND MotDePasse = ?",
-                        (pseudo_connexion, hashlib.sha256(mot_de_passe_connexion.encode()).hexdigest())
-                    )
-                    if verif.fetchone(): # Si la connexion réussit
-                        message_connexion = "Vous êtes connecté :D Appuyez sur Échap"
-                        print("Vous êtes désormais connecté !")
+                    verif = Gestion.ConnexionCompte(pseudo_connexion, mot_de_passe_connexion)
+                    if verif : # Si la connexion réussit
+                        message_connexion = "Vous êtes connecté :D Appuyez sur Échap."
                         compte_connecte = pseudo_connexion
-                        argent_stock_compte = curseur.execute("""
-                                                              SELECT Argent
-                                                              FROM Base_Données_Comptes
-                                                              WHERE Pseudo = ?""",
-                                                              (compte_connecte,))
-                        argent_compte = argent_stock_compte.fetchone()[0]
+                        argent_compte = Gestion.RecupArgent(compte_connecte)
                     else:
                         message_connexion = "Pseudo ou mot de passe incorrect."
                         compte_connecte = ""
@@ -186,21 +158,19 @@ while running:
                 elif input_mdp.collidepoint(event.pos):
                     champ_actif = "mdp_creation"
                 elif button_valider_create.collidepoint(event.pos):
-                    try : # Bout de code gérant la création d’un compte.
-                        curseur.execute(
-                        """
-                        INSERT INTO Base_Données_Comptes
-                        (Identifiant, Pseudo, MotDePasse, Nom, Prénom, Argent)
-                        VALUES (NULL, ?, ?, ?, ?, ?)
-                        """,
-                        (pseudo_creation, hashlib.sha256(mot_de_passe_creation.encode()).hexdigest(), nom, prenom, 0))
-                    except : # pseudo déjà utilisé
+                    # Bout de code gérant la création d’un compte.
+                    verification_unicité = Gestion.VerificationCompte(pseudo_creation)
+                    if verification_unicité : # pseudo déjà utilisé
                         message_creation = "Erreur, le pseudo est déjà pris. Réessayez."
                         reajustement = 0
                     else :
-                        base_donnee.commit()
-                        message_creation = "Votre compte a été créé. Appuyez sur Échap et connectez-vous."
-                        reajustement = -100
+                        if all([pseudo_creation, mot_de_passe_creation, nom, prenom]):
+                            Gestion.CreationCompte(pseudo_creation, mot_de_passe_creation, nom, prenom)
+                            message_creation = "Votre compte a été créé. Appuyez sur Échap et connectez-vous."
+                            reajustement = -100
+                        else :
+                            message_creation = "Au moins un champ n’a pas été rempli. Véfifiez."
+                            reajustement = 0
         # Si on utilise le clavier
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -237,9 +207,11 @@ while running:
                     elif champ_actif == "mdp_connexion":
                         mot_de_passe_connexion += event.unicode
                     elif champ_actif == "nom":
-                        nom += event.unicode
+                        if event.unicode.isalpha():
+                            nom += event.unicode
                     elif champ_actif == "prenom":
-                        prenom += event.unicode
+                        if event.unicode.isalpha():
+                            prenom += event.unicode
                     elif champ_actif == "argent":
                         if event.unicode.isdigit():
                             argent += event.unicode
