@@ -14,7 +14,6 @@ def machine_sous(fenetre,compte):
     argent_compte = Gestion.RecupArgent(compte)
     if argent_compte < 5:
         return
-    Gestion.AjoutArgent(-5,compte)
     font = pygame.font.Font(None, 38)
     font_big = pygame.font.Font(None, 90)
     font_small = pygame.font.Font(None, 28)
@@ -34,6 +33,7 @@ def machine_sous(fenetre,compte):
                 if event.key == pygame.K_ESCAPE:
                     return
                 elif event.key == pygame.K_SPACE:
+                    Gestion.AjoutArgent(-5,compte)
                     tirage = [random.choice(symboles) for _ in range(3)]
                     unique = list(set(tirage))
                     if len(unique) == 1: # Triple identique
@@ -51,16 +51,17 @@ def machine_sous(fenetre,compte):
                         couleur_msg = RED
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_jouer.collidepoint(event.pos):
+                    Gestion.AjoutArgent(-5,compte)
                     tirage = [random.choice(symboles) for _ in range(3)]
                     unique = list(set(tirage))
                     if len(unique) == 1:
                         if unique[0] == "7":
                             message = " JACKPOT !!! "
                             couleur_msg = GREEN
+                            Gestion.AjoutArgent(500,compte)
                         else:
                             message = f"Bravo, 3 ({unique[0]})  identiques ! vous gagnez 500€"
                             couleur_msg = GREEN
-                            Gestion.AjoutArgent(500,compte)
                     elif len(unique) == 2:
                         message = "Deux symboles identiques, pas mauvais ! Vous gagnez 15€"
                         couleur_msg = WHITE

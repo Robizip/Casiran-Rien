@@ -24,7 +24,6 @@ def loto(fenetre,compte):
     #test si l'utilissateur a assez d'argent
     if argent_compte < 2:
         return
-    Gestion.AjoutArgent(-2,compte)
     # Grille des boutons 
     boutons = []
     for i in range(49):
@@ -48,6 +47,7 @@ def loto(fenetre,compte):
                 if event.key == pygame.K_ESCAPE:
                     return
                 if event.key == pygame.K_SPACE and len(numeros) == 6:
+                    Gestion.AjoutArgent(-2,compte)
                     resultat = None
                     pool = list(range(1, 50))
                     gagnants = random.sample(pool, 5)
@@ -88,6 +88,7 @@ def loto(fenetre,compte):
                 
                 # Recoder une deuxième fois mais permet de  faire fonctionner le jeu
                 if button_lancer.collidepoint(event.pos) and len(numeros) == 6:
+                    Gestion.AjoutArgent(-2,compte)
                     resultat = None
                     pool = list(range(1, 50))
                     gagnants = random.sample(pool, 5)
