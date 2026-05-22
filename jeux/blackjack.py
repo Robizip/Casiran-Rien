@@ -118,6 +118,7 @@ def blackjack(fenetre,compte):
                     carte.pop(nb)
                     hit += cartejouer
                     messages.append(f"Vous restez. Dernière carte : {cartejouer}  —  Total : {hit}")
+                    # On perd quand on dépasse 21
                     if hit < 22:
                         lost = 1
                     elif hit > 21:
