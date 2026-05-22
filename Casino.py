@@ -1,5 +1,6 @@
-import pygame
-import données.GestionBD as Gestion
+import pygame # Librarie utilisée pour faire l’interface graphique
+import données.GestionBD as Gestion # Lien avec la base de donnée
+# Lien avec les différents jeux
 from jeux.loto import loto as loto_run
 from jeux.chifoumi import chifoumi as chifoumi_run
 from jeux.blackjack import blackjack as blackjack_run
@@ -10,7 +11,7 @@ from jeux.Expulsion_Election import bataillepolitique as bataillepolitique_run
 
 pygame.init()
 
-# couleurs
+# couleurs (pour pygame)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 BLUE2 = (0, 0, 215)
@@ -62,7 +63,7 @@ button_valider_connect = pygame.Rect(200, 290, 220, 50)
 button_valider_create = pygame.Rect(200, 450, 220, 50)
 coin_compte = pygame.Rect(620,0,500,80)
 
-# variables
+# variables diverses utiles à pygame
 etat = "menu_principal"
 champ_actif = None
 pseudo_creation = ""
